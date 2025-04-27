@@ -21,7 +21,7 @@ export const FreelanceProfile = () => {
                   {
                     title: "Areas of Interest",
                     description: "Web Development, UI/UX Design, Mobile Apps",
-                  },
+                  }
                 ]}
                 renderItem={(item) => (
                   <List.Item>
@@ -32,12 +32,14 @@ export const FreelanceProfile = () => {
                   </List.Item>
                 )}
               />
-              <div style={{ marginTop: "1rem" }}>
+              
+            </Card>
+
+            <Card style={{ marginTop: "1rem" }}>
+            <div style={{ marginTop: "1rem" }}>
                 <Title level={4}>Description</Title>
                 <Paragraph>
-                  Passionate freelancer with 3+ years of experience in creating
-                  user-friendly web and mobile applications. Let's bring your
-                  ideas to life!
+                  Im a passionate web developer with over 5 years of experience in creating dynamic and user-friendly websites. I specialize in front-end development, but I also have a strong understanding of back-end technologies. My goal is to deliver high-quality work that meets the needs of my clients.
                 </Paragraph>
               </div>
             </Card>
@@ -67,8 +69,28 @@ export const FreelanceProfile = () => {
                 </div>
               </div>
               <div className="absolute top-0 right-0 p-4">
-                <Button type="primary">Profile Settings</Button>
+                <Button color="default" variant="solid">Profile Settings</Button>
               </div>
+            </Card>
+
+            <Card style={{ marginTop: "1rem" }}>
+              <Title level={4}>Skills</Title>
+              <List
+                grid={{ gutter: 16, column: 2 }}
+                dataSource={[
+                  "JavaScript",
+                  "React",
+                  "Node.js",
+                  "CSS",
+                  "HTML",
+                  "UI/UX Design",
+                ]}
+                renderItem={(item) => (
+                  <List.Item>
+                    <Card>{item}</Card>
+                  </List.Item>
+                )}
+              />
             </Card>
           </Col>
         </Row>
