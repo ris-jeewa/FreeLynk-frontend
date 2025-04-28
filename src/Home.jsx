@@ -1,4 +1,6 @@
 import React from 'react'
+import { BiHome } from 'react-icons/bi'
+import { CiSettings } from 'react-icons/ci'
 
 export const Home = () => {
   return (
@@ -7,16 +9,83 @@ export const Home = () => {
       <header className="bg-white shadow-md">
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
         <h1 className="text-2xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">FreeLynk</h1>
-          {/* <nav className="space-x-4">
-            <a href="/" className="text-gray-700 hover:text-blue-600">Home</a>
-            <a href="/services" className="text-gray-700 hover:text-blue-600">Services</a>
-            <a href="#" className="text-gray-700 hover:text-blue-600">Freelancers</a>
-            <a href="#" className="text-gray-700 hover:text-blue-600">Contact</a>
-          </nav> */}
+          
         </div>
       </header>
+      <div className="py-4 flex-1/2 fixed inset-0 bg-opacity-50 z-20 md:hidden">
+          <div className="px-4 py-2 text-xs text-gray-500 font-medium uppercase">Menu</div>
+          
+          <nav 
+            href="/" 
+            // icon={<BiHome />} 
+            // isActive={location === '/'}
+          >
+            Dashboard
+          </nav>
+          
+          <nav 
+            href="/projects" 
+            // icon={<BriefcaseBusiness />} 
+            // isActive={location.startsWith('/projects')}
+          >
+            Browse Projects
+          </nav>
+          
+          {/* {user?.role === 'client' && (
+            <nav 
+              href="/create-project" 
+              icon={<PlusSquare />} 
+              isActive={location === '/create-project'}
+            >
+              Post a Project
+            </nav>
+          )} */}
+          
+          <nav 
+            href="/messages" 
+            // icon={<MessageSquare />} 
+            // isActive={location === '/messages'}
+          >
+            Messages
+          </nav>
+          
+          <nav 
+            href="/contracts" 
+            // icon={<ScrollText />} 
+            // isActive={location === '/contracts'}
+          >
+            Contracts
+          </nav>
+          
+          <nav 
+            href="/payments" 
+            // icon={<CreditCard />} 
+            // isActive={location === '/payments'}
+          >
+            Payments
+          </nav>
+          
+          <div className="px-4 py-2 mt-4 text-xs text-gray-500 font-medium uppercase">Account</div>
+          
+          <nav 
+            href="/profile" 
+            // icon={<User />} 
+            // isActive={location === '/profile'}
+          >
+            My Profile
+          </nav>
+          
+          <nav 
+            href="/settings" 
+            // icon={<CiSettings />} 
+            // isActive={location === '/settings'}
+          >
+            Settings
+          </nav>
+        </div>
 
-      {/* Hero Section */}
+      <div className="flex-1/2">
+        {/* Hero Section */}
       <section className="bg-blue-100 py-20 text-center">
         <h2 className="text-4xl font-bold text-blue-800 mb-4">Find the Perfect Freelancer</h2>
         <p className="text-gray-700 mb-8">Connect with talented freelancers around the globe, get things done fast.</p>
@@ -55,6 +124,7 @@ export const Home = () => {
       <footer className="bg-gray-800 text-white text-center py-6 mt-16">
         <p>© 2025 FreeLynk. All rights reserved.</p>
       </footer>
+      </div>
     </div>
   )
 }

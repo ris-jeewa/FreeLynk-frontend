@@ -7,7 +7,6 @@ const { Title, Paragraph } = Typography;
 
 export const FreelanceProfile = () => {
   return (
-    <div>
       <div style={{ maxWidth: "1000px", margin: "auto", padding: "2rem" }}>
         <Row gutter={[24, 24]}>
           {/* Left Side */}
@@ -95,6 +94,5 @@ export const FreelanceProfile = () => {
           </Col>
         </Row>
       </div>
-    </div>
   );
 };
