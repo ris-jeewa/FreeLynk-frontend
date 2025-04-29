@@ -3,7 +3,34 @@ import { BiHome } from 'react-icons/bi'
 import { CiSettings } from 'react-icons/ci'
 import Sidebar from '../components/Sidebar'
 
+const NetworkCircle = ({ image, name, position, rotation, distance }) => {
+  const style = {
+    position: 'absolute',
+    left: '50%',
+    top: '50%',
+    transform: `rotate(${rotation}deg) translate(${distance}px) rotate(-${rotation}deg)`,
+  };
+
+  return (
+    <div style={style} className="absolute">
+      <div className="relative -translate-x-1/2 -translate-y-1/2">
+        <img src={image} alt={name} className="w-16 h-16 rounded-full border-2 border-white" />
+        <p className="text-sm text-white text-center mt-2 whitespace-nowrap">{name}</p>
+      </div>
+    </div>
+  );
+};
+
 export const Home = () => {
+  const profiles = [
+    { name: 'Adam Crawford', image: '/avatars/hero-img-4.jpeg', rotation: 0, distance: 160 },
+    { name: 'Christina Jones', image: '/avatars/hero-img-2.jpeg', rotation: 60, distance: 160 },
+    { name: 'James Warner', image: '/avatars/hero-img-3.jpeg', rotation: 120, distance: 160 },
+    { name: 'Sophia Garner', image: '/avatars/hero-img-1.jpeg', rotation: 180, distance: 160 },
+    { name: 'Kevin Kapoor', image: '/avatars/hero-img-6.jpeg', rotation: 240, distance: 160 },
+    { name: 'Megan Trainer', image: '/avatars/hero-img-7.jpeg', rotation: 300, distance: 160 },
+  ];
+
   return (
     <div className="font-sans bg-[#1A1A1A] min-h-screen text-white">
       {/* Navbar */}
@@ -49,29 +76,33 @@ export const Home = () => {
               </button>
             </div>
             
-            {/* Right Content - Circular Image */}
+            {/* Right Content - Network Circle */}
             <div className="relative">
-              <div className="w-[500px] h-[500px] rounded-full bg-orange-500 overflow-hidden relative">
-                <img 
-                  src="/hero-image.jpg" 
-                  alt="Freelancer"
-                  className="w-full h-full object-cover"
-                />
-                {/* Decorative Elements */}
-                <div className="absolute top-4 right-4 w-12 h-12">
-                  <div className="animate-spin">
-                    <svg viewBox="0 0 100 100" className="w-full h-full">
-                      <circle cx="50" cy="50" r="40" stroke="white" strokeWidth="2" fill="none" />
-                    </svg>
+              <div className="w-[500px] h-[500px] relative mx-auto">
+                {/* Center Profile */}
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+                  <div className="relative">
+                    <img 
+                      src="/avatars/hero-img-8.jpeg" 
+                      alt="Monica Geller" 
+                      className="w-32 h-32 rounded-full border-4 border-white mx-auto"
+                    />
+                    <div className="absolute -top-2 -right-2 bg-blue-400 text-white text-sm px-2 py-1 rounded-full">
+                      ★ 4.8
+                    </div>
                   </div>
+                  <h3 className="text-white text-xl mt-2">Monica Geller</h3>
                 </div>
-                <div className="absolute bottom-8 left-8">
-                  <div className="w-8 h-8 text-white">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-                    </svg>
-                  </div>
-                </div>
+
+                {/* Circular Background Rings */}
+                <div className="absolute inset-0 rounded-full border-2 border-gray-700 opacity-20"></div>
+                <div className="absolute inset-8 rounded-full border-2 border-gray-700 opacity-20"></div>
+                <div className="absolute inset-16 rounded-full border-2 border-gray-700 opacity-20"></div>
+
+                {/* Surrounding Profiles */}
+                {profiles.map((profile, index) => (
+                  <NetworkCircle key={index} {...profile} />
+                ))}
               </div>
             </div>
           </div>
