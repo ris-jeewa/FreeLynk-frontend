@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { BiHome } from 'react-icons/bi'
 import { CiSettings } from 'react-icons/ci'
 import Sidebar from '../components/Sidebar'
+import gsap from 'gsap'
 
 const NetworkCircle = ({ image, name, position, rotation, distance }) => {
   const style = {
@@ -21,7 +22,45 @@ const NetworkCircle = ({ image, name, position, rotation, distance }) => {
   );
 };
 
+const TypewriterText = ({ text }) => {
+  const [displayText, setDisplayText] = useState('');
+  const index = useRef(0);
+
+  useEffect(() => {
+    index.current = 0;
+    setDisplayText('');
+
+    const typeWriter = () => {
+      if (index.current < text.length) {
+        setDisplayText(text.substring(0, index.current + 1));
+        index.current += 1;
+        setTimeout(typeWriter, 100);
+      }
+    };
+
+    typeWriter();
+
+    return () => {
+      index.current = text.length; // Stop the animation on cleanup
+    };
+  }, [text]);
+
+  return (
+    <span className="inline-block">
+      {displayText}
+      <span className="animate-blink">|</span>
+    </span>
+  );
+};
+
 export const Home = () => {
+  const heroTextRef = useRef(null);
+  const centerProfileRef = useRef(null);
+  const circlesRef = useRef(null);
+  const welcomeRef = useRef(null);
+  const buttonRef = useRef(null);
+  const descriptionRef = useRef(null);
+
   const profiles = [
     { name: 'Adam Crawford', image: '/avatars/hero-img-4.jpeg', rotation: 0, distance: 160 },
     { name: 'Christina Jones', image: '/avatars/hero-img-2.jpeg', rotation: 60, distance: 160 },
@@ -51,8 +90,6 @@ export const Home = () => {
         </div>
       </header>
 
-      {/* Sidebar */}
-
       {/* Main Content */}
       <div className="pt-20 px-8">
         <div className="max-w-7xl mx-auto">
@@ -60,18 +97,23 @@ export const Home = () => {
           <div className="grid grid-cols-2 gap-12 items-center min-h-[80vh]">
             {/* Left Content */}
             <div className="space-y-6">
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2" ref={welcomeRef}>
                 <div className="w-12 h-1 bg-orange-500"></div>
-                <h2 className="text-xl text-orange-500">Welcome to FreeLynk</h2>
+                <h2 className="text-xl text-orange-500">
+                  <TypewriterText text="Welcome to FreeLynk" />
+                </h2>
               </div>
-              <h1 className="text-6xl font-bold leading-tight">
+              <h1 className="text-6xl font-bold leading-tight" ref={heroTextRef}>
                 FREELANCERS,<br />
                 GATHER HERE
               </h1>
-              <p className="text-gray-400 text-lg max-w-md">
+              <p className="text-gray-400 text-lg max-w-md" ref={descriptionRef}>
                 Engaging community for Freelancers, you can have fun while working, acquire new clients and complete daily challenges.
               </p>
-              <button className="bg-orange-500 text-white px-8 py-3 rounded-full text-lg hover:bg-orange-600 transition-colors">
+              <button 
+                className="bg-orange-500 text-white px-8 py-3 rounded-full text-lg hover:bg-orange-600 transition-colors"
+                ref={buttonRef}
+              >
                 Lets Go!
               </button>
             </div>
@@ -80,7 +122,10 @@ export const Home = () => {
             <div className="relative">
               <div className="w-[500px] h-[500px] relative mx-auto">
                 {/* Center Profile */}
-                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+                <div 
+                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center"
+                  ref={centerProfileRef}
+                >
                   <div className="relative">
                     <img 
                       src="/avatars/hero-img-8.jpeg" 
@@ -95,9 +140,11 @@ export const Home = () => {
                 </div>
 
                 {/* Circular Background Rings */}
-                <div className="absolute inset-0 rounded-full border-2 border-gray-700 opacity-20"></div>
-                <div className="absolute inset-8 rounded-full border-2 border-gray-700 opacity-20"></div>
-                <div className="absolute inset-16 rounded-full border-2 border-gray-700 opacity-20"></div>
+                <div ref={circlesRef}>
+                  <div className="absolute inset-0 rounded-full border-2 border-orange-700 opacity-10"></div>
+                  <div className="absolute inset-8 rounded-full border-2 border-orange-600 opacity-15"></div>
+                  <div className="absolute inset-16 rounded-full border-2 border-orange-600 opacity-20"></div>
+                </div>
 
                 {/* Surrounding Profiles */}
                 {profiles.map((profile, index) => (
