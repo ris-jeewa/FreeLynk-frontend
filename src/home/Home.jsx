@@ -5,6 +5,30 @@ import Sidebar from '../components/Sidebar'
 import gsap from 'gsap'
 
 const NetworkCircle = ({ image, name, position, rotation, distance }) => {
+  const imageRef = useRef(null);
+
+  useEffect(() => {
+    // Create a bouncing animation for the image only
+    gsap.to(imageRef.current, {
+      y: -10,
+      duration: 1.5,
+      repeat: -1,
+      yoyo: true,
+      ease: "power1.inOut",
+      delay: Math.random() * 2,
+    });
+
+    // Add slight rotation to the image only
+    gsap.to(imageRef.current, {
+      rotate: "8deg",
+      duration: 2,
+      repeat: -1,
+      yoyo: true,
+      ease: "none",
+      delay: Math.random() * 2,
+    });
+  }, []);
+
   const style = {
     position: 'absolute',
     left: '50%',
@@ -15,7 +39,13 @@ const NetworkCircle = ({ image, name, position, rotation, distance }) => {
   return (
     <div style={style} className="absolute">
       <div className="relative -translate-x-1/2 -translate-y-1/2">
-        <img src={image} alt={name} className="w-16 h-16 rounded-full border-2 border-white" />
+        <div ref={imageRef}>
+          <img 
+            src={image} 
+            alt={name} 
+            className="w-16 h-16 rounded-full border-2 border-white hover:scale-110 transition-transform duration-300"
+          />
+        </div>
         <p className="text-sm text-white text-center mt-2 whitespace-nowrap">{name}</p>
       </div>
     </div>
@@ -41,7 +71,7 @@ const TypewriterText = ({ text }) => {
     typeWriter();
 
     return () => {
-      index.current = text.length; // Stop the animation on cleanup
+      index.current = text.length;
     };
   }, [text]);
 
@@ -132,7 +162,7 @@ export const Home = () => {
                       alt="Monica Geller" 
                       className="w-32 h-32 rounded-full border-4 border-white mx-auto"
                     />
-                    <div className="absolute -top-2 -right-2 bg-blue-400 text-white text-sm px-2 py-1 rounded-full">
+                    <div className="absolute -top-2 -right-2 bg-orange-400 text-white text-sm px-2 py-1 rounded-full">
                       ★ 4.8
                     </div>
                   </div>
