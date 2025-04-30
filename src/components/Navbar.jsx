@@ -6,7 +6,7 @@ export const Navbar = () => {
     <header className="fixed w-full z-10 bg-[#1A1A1A] border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-8 py-4">
           <nav className="flex justify-between items-center">
-            <Link to="/" className="text-2xl font-bold text-white hover:text-orange-500 transition-colors">
+            <Link to="/" className="text-2xl font-bold text-white transition-colors">
               FreeLynk
             </Link>
             <div className="flex items-center space-x-8">
