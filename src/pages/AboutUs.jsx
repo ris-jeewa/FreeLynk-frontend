@@ -37,7 +37,7 @@ const AboutUs = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#1A1A1A] text-white pt-20">
+    <div className="min-h-screen bg-[#1A1A1A] text-white pt-10">
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-8 py-16">
         <div className="text-center mb-16">
