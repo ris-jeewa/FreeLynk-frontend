@@ -3,6 +3,7 @@ import { HeroSection } from '../components/home/HeroSection';
 import { TrustedClientsSec } from '../components/home/TrustedClientsSec';
 import { CategorySection } from '../components/home/CategorySection';
 import { HowToGetStarted } from '../components/home/HowToGetStarted';
+import SpecialitySection from '../components/home/SpecialitySection';
 
 export const Home = () => {
   return (
@@ -20,6 +21,9 @@ export const Home = () => {
 
           {/* How to Get Started Section */}
           <HowToGetStarted />
+
+          {/* Speciality Section */}
+          <SpecialitySection />
         </div>
       </div>
     </div>

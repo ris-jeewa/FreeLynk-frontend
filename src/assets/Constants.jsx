@@ -1,4 +1,4 @@
-import { FaCode, FaPalette, FaChartLine, FaLanguage, FaMobile, FaVideo, FaMusic, FaPen } from 'react-icons/fa'
+import { FaCode, FaPalette, FaChartLine, FaLanguage, FaMobile, FaVideo, FaMusic, FaPen ,FaShieldAlt, FaHandshake, FaUsers} from 'react-icons/fa'
 
 export const profiles = [
     { name: 'Adam Crawford', image: '/avatars/hero-img-4.jpeg', rotation: 0, distance: 160 },
@@ -58,5 +58,29 @@ export const profiles = [
       icon: <FaPen className="text-4xl" />,
       description: 'Blog Writing, Technical Writing',
       color: 'bg-orange-500'
+    }
+  ];
+
+
+export const features = [
+    {
+      icon: <FaShieldAlt className="text-4xl text-orange-500" />,
+      title: "Secure Platform",
+      description: "Your projects and payments are protected with our advanced security measures"
+    },
+    {
+      icon: <FaHandshake className="text-4xl text-orange-500" />,
+      title: "Trusted Community",
+      description: "Join thousands of verified freelancers and clients worldwide"
+    },
+    {
+      icon: <FaChartLine className="text-4xl text-orange-500" />,
+      title: "Growth Opportunities",
+      description: "Access to high-quality projects and continuous learning resources"
+    },
+    {
+      icon: <FaUsers className="text-4xl text-orange-500" />,
+      title: "Diverse Talent",
+      description: "Find the perfect match for your project from our global talent pool"
     }
   ];
