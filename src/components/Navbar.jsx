@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { IoIosArrowDown } from "react-icons/io";
 
 export const Navbar = () => {
   const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
 
   const handleLogout = () => {
     logout({ returnTo: window.location.origin });
@@ -20,12 +22,13 @@ export const Navbar = () => {
   };
 
   const handleSignUp = () => {
-    loginWithRedirect({
-      authorizationParams: {
-        screen_hint: 'signup',
-      },
-      initialScreen: 'signUp'
-    });
+    // loginWithRedirect({
+    //   authorizationParams: {
+    //     screen_hint: 'signup',
+    //   },
+    //   initialScreen: 'signUp'
+    // });
+    navigate('/signup');
   };
 
   return (

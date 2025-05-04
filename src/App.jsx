@@ -5,6 +5,7 @@ import Login from "./Login/Login";
 import { FreelanceProfile } from "./freelancer/Profile";
 import AboutUs from "./pages/AboutUs";
 import Layout from "./components/Layout";
+import SignUp from "./pages/SignUp";
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/freelance-profile/:id" element={<FreelanceProfile />} />
         <Route path="/about" element={<AboutUs />} />
       </Routes>
