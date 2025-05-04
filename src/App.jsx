@@ -6,6 +6,7 @@ import { FreelanceProfile } from "./freelancer/Profile";
 import AboutUs from "./pages/AboutUs";
 import Layout from "./components/Layout";
 import SignUp from "./pages/SignUp";
+import ClientProfile from "./client/profile";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/freelance-profile/:id" element={<FreelanceProfile />} />
+        <Route path="/client-profile" element={<ClientProfile />} />
         <Route path="/about" element={<AboutUs />} />
       </Routes>
     </Layout>
