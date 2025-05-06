@@ -1,8 +1,37 @@
 import React, { useState } from 'react';
-import { FaUser, FaCode, FaBriefcase, FaStar, FaEdit, FaGithub, FaLinkedin, FaGlobe } from 'react-icons/fa';
+import { FaUser, FaCode, FaBriefcase, FaStar, FaEdit, FaGithub, FaLinkedin, FaGlobe, FaTimes } from 'react-icons/fa';
 
 export const FreelanceProfile = () => {
   const [activeTab, setActiveTab] = useState('personal');
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [profileData, setProfileData] = useState({
+    name: 'Sarah Johnson',
+    title: 'Full Stack Developer',
+    location: 'New York, USA',
+    rating: '4.9',
+    reviews: '124',
+    github: 'https://github.com',
+    linkedin: 'https://linkedin.com',
+    portfolio: 'https://portfolio.com'
+  });
+
+  const handleEditProfile = () => {
+    setIsEditModalOpen(true);
+  };
+
+  const handleSaveProfile = (e) => {
+    e.preventDefault();
+    // Here you would typically make an API call to save the data
+    setIsEditModalOpen(false);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setProfileData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
   return (
     <div className="min-h-screen bg-[#1A1A1A] py-12">
@@ -22,34 +51,153 @@ export const FreelanceProfile = () => {
                 </button>
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-white">Sarah Johnson</h1>
-                <p className="text-xl text-orange-500 mb-2">Full Stack Developer</p>
-                <p className="text-gray-400 mb-3">New York, USA</p>
+                <h1 className="text-3xl font-bold text-white">{profileData.name}</h1>
+                <p className="text-xl text-orange-500 mb-2">{profileData.title}</p>
+                <p className="text-gray-400 mb-3">{profileData.location}</p>
                 <div className="flex items-center gap-4">
                   <div className="flex items-center">
                     <FaStar className="text-yellow-400 mr-1" />
-                    <span className="text-white">4.9</span>
-                    <span className="text-gray-400 ml-1">(124 reviews)</span>
+                    <span className="text-white">{profileData.rating}</span>
+                    <span className="text-gray-400 ml-1">({profileData.reviews} reviews)</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-orange-500">
+                    <a href={profileData.github} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-orange-500">
                       <FaGithub size={20} />
                     </a>
-                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-orange-500">
+                    <a href={profileData.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-orange-500">
                       <FaLinkedin size={20} />
                     </a>
-                    <a href="https://portfolio.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-orange-500">
+                    <a href={profileData.portfolio} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-orange-500">
                       <FaGlobe size={20} />
                     </a>
                   </div>
                 </div>
               </div>
             </div>
-            <button className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors">
+            <button 
+              onClick={handleEditProfile}
+              className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors"
+            >
               Edit Profile
             </button>
           </div>
         </div>
+
+        {/* Edit Profile Modal */}
+        {isEditModalOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-[#2A2A2A] rounded-lg p-8 max-w-2xl w-full mx-4">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-white">Edit Profile</h2>
+                <button 
+                  onClick={() => setIsEditModalOpen(false)}
+                  className="text-gray-400 hover:text-white"
+                >
+                  <FaTimes size={24} />
+                </button>
+              </div>
+              <form onSubmit={handleSaveProfile} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-gray-400 mb-2">Full Name</label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={profileData.name}
+                      onChange={handleInputChange}
+                      className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-400 mb-2">Title</label>
+                    <input
+                      type="text"
+                      name="title"
+                      value={profileData.title}
+                      onChange={handleInputChange}
+                      className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-400 mb-2">Location</label>
+                    <input
+                      type="text"
+                      name="location"
+                      value={profileData.location}
+                      onChange={handleInputChange}
+                      className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-400 mb-2">Rating</label>
+                    <input
+                      type="text"
+                      name="rating"
+                      value={profileData.rating}
+                      onChange={handleInputChange}
+                      className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-400 mb-2">Number of Reviews</label>
+                    <input
+                      type="text"
+                      name="reviews"
+                      value={profileData.reviews}
+                      onChange={handleInputChange}
+                      className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-400 mb-2">GitHub URL</label>
+                    <input
+                      type="url"
+                      name="github"
+                      value={profileData.github}
+                      onChange={handleInputChange}
+                      className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-400 mb-2">LinkedIn URL</label>
+                    <input
+                      type="url"
+                      name="linkedin"
+                      value={profileData.linkedin}
+                      onChange={handleInputChange}
+                      className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-400 mb-2">Portfolio URL</label>
+                    <input
+                      type="url"
+                      name="portfolio"
+                      value={profileData.portfolio}
+                      onChange={handleInputChange}
+                      className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-end gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setIsEditModalOpen(false)}
+                    className="px-6 py-2 text-gray-400 hover:text-white transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors"
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
 
         {/* Tabs */}
         <div className="flex space-x-4 mb-8 border-b border-gray-700 overflow-x-auto">
