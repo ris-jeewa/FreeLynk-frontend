@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { FaUser, FaCode, FaBriefcase, FaStar, FaEdit, FaGithub, FaLinkedin, FaGlobe, FaTimes } from 'react-icons/fa';
 
 export const FreelanceProfile = () => {
   const [activeTab, setActiveTab] = useState('personal');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [profileImage, setProfileImage] = useState("https://via.placeholder.com/150");
+  const fileInputRef = useRef(null);
   const [profileData, setProfileData] = useState({
     name: 'Sarah Johnson',
     title: 'Full Stack Developer',
@@ -33,6 +35,21 @@ export const FreelanceProfile = () => {
     }));
   };
 
+  const handleImageClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#1A1A1A] py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -42,11 +59,21 @@ export const FreelanceProfile = () => {
             <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
               <div className="relative">
                 <img
-                  src="https://via.placeholder.com/150"
+                  src={profileImage}
                   alt="Profile"
-                  className="w-32 h-32 rounded-full border-4 border-orange-500"
+                  className="w-32 h-32 rounded-full border-4 border-orange-500 object-cover"
                 />
-                <button className="absolute bottom-0 right-0 bg-orange-500 p-2 rounded-full hover:bg-orange-600 transition-colors">
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleImageChange}
+                  accept="image/*"
+                  className="hidden"
+                />
+                <button 
+                  onClick={handleImageClick}
+                  className="absolute bottom-0 right-0 bg-orange-500 p-2 rounded-full hover:bg-orange-600 transition-colors"
+                >
                   <FaEdit className="text-white" />
                 </button>
               </div>
