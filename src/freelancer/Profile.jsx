@@ -4,6 +4,7 @@ import { FaUser, FaCode, FaBriefcase, FaStar, FaEdit, FaGithub, FaLinkedin, FaGl
 export const FreelanceProfile = () => {
   const [activeTab, setActiveTab] = useState('personal');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isAboutMeEditOpen, setIsAboutMeEditOpen] = useState(false);
   const [profileImage, setProfileImage] = useState("https://via.placeholder.com/150");
   const fileInputRef = useRef(null);
   const [profileData, setProfileData] = useState({
@@ -15,6 +16,12 @@ export const FreelanceProfile = () => {
     github: 'https://github.com',
     linkedin: 'https://linkedin.com',
     portfolio: 'https://portfolio.com'
+  });
+
+  const [aboutMeData, setAboutMeData] = useState({
+    description: 'Full Stack Developer with 5+ years of experience in building scalable web applications. Passionate about creating elegant solutions to complex problems. Specialized in React, Node.js, and cloud technologies.',
+    email: 'sarah.johnson@example.com',
+    phone: '+1 234 567 8900'
   });
 
   const handleEditProfile = () => {
@@ -48,6 +55,23 @@ export const FreelanceProfile = () => {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleAboutMeEdit = () => {
+    setIsAboutMeEditOpen(true);
+  };
+
+  const handleAboutMeSave = (e) => {
+    e.preventDefault();
+    setIsAboutMeEditOpen(false);
+  };
+
+  const handleAboutMeChange = (e) => {
+    const { name, value } = e.target;
+    setAboutMeData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   return (
@@ -267,33 +291,29 @@ export const FreelanceProfile = () => {
         <div className="bg-[#2A2A2A] rounded-lg p-8">
           {activeTab === 'personal' && (
             <div className="space-y-8">
-              <div>
+              <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold text-white mb-4">About Me</h2>
-                <p className="text-gray-400 leading-relaxed">
-                  Full Stack Developer with 5+ years of experience in building scalable web applications.
-                  Passionate about creating elegant solutions to complex problems. Specialized in React,
-                  Node.js, and cloud technologies.
-                </p>
+                <button
+                  onClick={handleAboutMeEdit}
+                  className="text-orange-500 hover:text-orange-600"
+                >
+                  <FaEdit size={20} />
+                </button>
               </div>
+              <p className="text-gray-400 leading-relaxed">
+                {aboutMeData.description}
+              </p>
 
               <div>
                 <h3 className="text-xl font-semibold text-white mb-4">Contact Information</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-gray-400 mb-2">Email</label>
-                    <input
-                      type="email"
-                      value="sarah.johnson@example.com"
-                      className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
-                    />
+                    <p className="text-gray-400">{aboutMeData.email}</p>
                   </div>
                   <div>
                     <label className="block text-gray-400 mb-2">Phone</label>
-                    <input
-                      type="tel"
-                      value="+1 234 567 8900"
-                      className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
-                    />
+                    <p className="text-gray-400">{aboutMeData.phone}</p>
                   </div>
                 </div>
               </div>
@@ -371,6 +391,71 @@ export const FreelanceProfile = () => {
           )}
         </div>
       </div>
+
+      {/* About Me Edit Modal */}
+      {isAboutMeEditOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-[#2A2A2A] rounded-lg p-8 max-w-2xl w-full mx-4">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-white">Edit About Me</h2>
+              <button 
+                onClick={() => setIsAboutMeEditOpen(false)}
+                className="text-gray-400 hover:text-white"
+              >
+                <FaTimes size={24} />
+              </button>
+            </div>
+            <form onSubmit={handleAboutMeSave} className="space-y-6">
+              <div>
+                <label className="block text-gray-400 mb-2">Description</label>
+                <textarea
+                  name="description"
+                  value={aboutMeData.description}
+                  onChange={handleAboutMeChange}
+                  className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500 h-32"
+                />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-gray-400 mb-2">Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={aboutMeData.email}
+                    onChange={handleAboutMeChange}
+                    className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-400 mb-2">Phone</label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={aboutMeData.phone}
+                    onChange={handleAboutMeChange}
+                    className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end gap-4">
+                <button
+                  type="button"
+                  onClick={() => setIsAboutMeEditOpen(false)}
+                  className="px-6 py-2 text-gray-400 hover:text-white transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }; 
