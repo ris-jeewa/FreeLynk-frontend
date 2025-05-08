@@ -292,15 +292,15 @@ export const FreelanceProfile = () => {
           {activeTab === 'personal' && (
             <div className="space-y-8">
               <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-white mb-4">About Me</h2>
+                <h2 className="text-2xl font-bold text-white mb-2">About Me</h2>
                 <button
                   onClick={handleAboutMeEdit}
-                  className="text-orange-500 hover:text-orange-600"
+                  className='border-1 border-gray-500 rounded-full p-2'
                 >
-                  <FaEdit size={20} />
+                  <FaEdit size={20} className='hover:text-orange-500 '/>
                 </button>
               </div>
-              <p className="text-gray-400 leading-relaxed">
+              <p className="text-gray-400 leading-relaxed  p-2 rounded-lg bg-gray-900 border-1 border-gray-500">
                 {aboutMeData.description}
               </p>
 
@@ -309,11 +309,11 @@ export const FreelanceProfile = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-gray-400 mb-2">Email</label>
-                    <p className="text-gray-400">{aboutMeData.email}</p>
+                    <p className="text-gray-400 p-2 rounded-lg bg-gray-900  border-1 border-gray-500">{aboutMeData.email}</p>
                   </div>
                   <div>
                     <label className="block text-gray-400 mb-2">Phone</label>
-                    <p className="text-gray-400">{aboutMeData.phone}</p>
+                    <p className="text-gray-400 p-2 rounded-lg bg-gray-900  border-1 border-gray-500">{aboutMeData.phone}</p>
                   </div>
                 </div>
               </div>
@@ -400,9 +400,8 @@ export const FreelanceProfile = () => {
               <h2 className="text-2xl font-bold text-white">Edit About Me</h2>
               <button 
                 onClick={() => setIsAboutMeEditOpen(false)}
-                className="text-gray-400 hover:text-white"
               >
-                <FaTimes size={24} />
+                <FaTimes size={24} className='hover:text-orange-500'/>
               </button>
             </div>
             <form onSubmit={handleAboutMeSave} className="space-y-6">
