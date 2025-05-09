@@ -7,6 +7,7 @@ import AboutUs from "./pages/AboutUs";
 import Layout from "./components/Layout";
 import SignUp from "./pages/SignUp";
 import ClientProfile from "./client/profile";
+import { Settings } from "./freelancer/Settings";
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="/freelance-profile/:id" element={<FreelanceProfile />} />
         <Route path="/client-profile" element={<ClientProfile />} />
         <Route path="/about" element={<AboutUs />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
     </Layout>
   );
