@@ -5,6 +5,7 @@ export const FreelanceProfile = () => {
   const [activeTab, setActiveTab] = useState('personal');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isAboutMeEditOpen, setIsAboutMeEditOpen] = useState(false);
+  const [isSkillsEditOpen, setIsSkillsEditOpen] = useState(false);
   const [profileImage, setProfileImage] = useState("https://via.placeholder.com/150");
   const fileInputRef = useRef(null);
   const [profileData, setProfileData] = useState({
@@ -22,6 +23,31 @@ export const FreelanceProfile = () => {
     description: 'Full Stack Developer with 5+ years of experience in building scalable web applications. Passionate about creating elegant solutions to complex problems. Specialized in React, Node.js, and cloud technologies.',
     email: 'sarah.johnson@example.com',
     phone: '+1 234 567 8900'
+  });
+
+  const [skillsData, setSkillsData] = useState({
+    skills: 'React, Node.js, TypeScript, Python, AWS, Docker, MongoDB, GraphQL',
+    experiences: [
+      {
+        position: 'Senior Developer',
+        company: 'Tech Solutions Inc.',
+        period: '2020 - Present',
+        description: 'Led development of multiple web applications, mentored junior developers, and implemented CI/CD pipelines.'
+      },
+      {
+        position: 'Full Stack Developer',
+        company: 'Digital Innovations',
+        period: '2018 - 2020',
+        description: 'Developed and maintained multiple client projects using React and Node.js.'
+      }
+    ]
+  });
+
+  const [newExperience, setNewExperience] = useState({
+    position: '',
+    company: '',
+    period: '',
+    description: ''
   });
 
   const handleEditProfile = () => {
@@ -71,6 +97,52 @@ export const FreelanceProfile = () => {
     setAboutMeData(prev => ({
       ...prev,
       [name]: value
+    }));
+  };
+
+  const handleSkillsEdit = () => {
+    setIsSkillsEditOpen(true);
+  };
+
+  const handleSkillsSave = (e) => {
+    e.preventDefault();
+    setIsSkillsEditOpen(false);
+  };
+
+  const handleSkillsChange = (e) => {
+    const { name, value } = e.target;
+    setSkillsData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleNewExperienceChange = (e) => {
+    const { name, value } = e.target;
+    setNewExperience(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleAddExperience = (e) => {
+    e.preventDefault();
+    setSkillsData(prev => ({
+      ...prev,
+      experiences: [...prev.experiences, newExperience]
+    }));
+    setNewExperience({
+      position: '',
+      company: '',
+      period: '',
+      description: ''
+    });
+  };
+
+  const handleRemoveExperience = (index) => {
+    setSkillsData(prev => ({
+      ...prev,
+      experiences: prev.experiences.filter((_, i) => i !== index)
     }));
   };
 
@@ -322,40 +394,37 @@ export const FreelanceProfile = () => {
 
           {activeTab === 'skills' && (
             <div className="space-y-8">
-              <div>
+              <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold text-white mb-6">Skills</h2>
-                <div className="flex flex-wrap gap-3">
-                  {['React', 'Node.js', 'TypeScript', 'Python', 'AWS', 'Docker', 'MongoDB', 'GraphQL'].map((skill) => (
-                    <span
-                      key={skill}
-                      className="bg-[#1A1A1A] text-white px-4 py-2 rounded-full border border-gray-700"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
+                <button
+                  onClick={handleSkillsEdit}
+                  className='border-1 border-gray-500 rounded-full p-2'
+                >
+                  <FaEdit size={20} className='hover:text-orange-500'/>
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                {skillsData.skills.split(',').map((skill) => (
+                  <span
+                    key={skill.trim()}
+                    className="bg-[#1A1A1A] text-white px-4 py-2 rounded-full border border-gray-700"
+                  >
+                    {skill.trim()}
+                  </span>
+                ))}
               </div>
 
               <div>
                 <h2 className="text-2xl font-bold text-white mb-6">Work Experience</h2>
                 <div className="space-y-6">
-                  <div className="border-l-2 border-orange-500 pl-4">
-                    <h3 className="text-xl font-semibold text-white">Senior Developer</h3>
-                    <p className="text-orange-500">Tech Solutions Inc.</p>
-                    <p className="text-gray-400">2020 - Present</p>
-                    <p className="text-gray-400 mt-2">
-                      Led development of multiple web applications, mentored junior developers,
-                      and implemented CI/CD pipelines.
-                    </p>
-                  </div>
-                  <div className="border-l-2 border-gray-700 pl-4">
-                    <h3 className="text-xl font-semibold text-white">Full Stack Developer</h3>
-                    <p className="text-orange-500">Digital Innovations</p>
-                    <p className="text-gray-400">2018 - 2020</p>
-                    <p className="text-gray-400 mt-2">
-                      Developed and maintained multiple client projects using React and Node.js.
-                    </p>
-                  </div>
+                  {skillsData.experiences.map((exp, index) => (
+                    <div key={index} className="border-l-2 border-orange-500 pl-4">
+                      <h3 className="text-xl font-semibold text-white">{exp.position}</h3>
+                      <p className="text-orange-500">{exp.company}</p>
+                      <p className="text-gray-400">{exp.period}</p>
+                      <p className="text-gray-400 mt-2">{exp.description}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -440,6 +509,126 @@ export const FreelanceProfile = () => {
                 <button
                   type="button"
                   onClick={() => setIsAboutMeEditOpen(false)}
+                  className="px-6 py-2 text-gray-400 hover:text-white transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Skills and Experience Edit Modal */}
+      {isSkillsEditOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-[#2A2A2A] rounded-lg p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-white">Edit Skills & Experience</h2>
+              <button 
+                onClick={() => setIsSkillsEditOpen(false)}
+              >
+                <FaTimes size={24} className='hover:text-orange-500'/>
+              </button>
+            </div>
+            <form onSubmit={handleSkillsSave} className="space-y-6">
+              <div>
+                <label className="block text-gray-400 mb-2">Skills (comma-separated)</label>
+                <textarea
+                  name="skills"
+                  value={skillsData.skills}
+                  onChange={handleSkillsChange}
+                  className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500 h-32"
+                  placeholder="Enter skills separated by commas"
+                />
+              </div>
+
+              <div>
+                <h3 className="text-xl font-semibold text-white mb-4">Work Experience</h3>
+                <div className="space-y-4">
+                  {skillsData.experiences.map((exp, index) => (
+                    <div key={index} className="bg-[#1A1A1A] p-4 rounded-lg">
+                      <div className="flex justify-between items-start mb-2">
+                        <h4 className="text-white font-medium">{exp.position}</h4>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveExperience(index)}
+                          className="text-red-500 hover:text-red-600"
+                        >
+                          <FaTimes />
+                        </button>
+                      </div>
+                      <p className="text-orange-500">{exp.company}</p>
+                      <p className="text-gray-400">{exp.period}</p>
+                      <p className="text-gray-400 mt-2">{exp.description}</p>
+                    </div>
+                  ))}
+
+                  <div className="bg-[#1A1A1A] p-4 rounded-lg">
+                    <h4 className="text-white font-medium mb-4">Add New Experience</h4>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-gray-400 mb-2">Position</label>
+                        <input
+                          type="text"
+                          name="position"
+                          value={newExperience.position}
+                          onChange={handleNewExperienceChange}
+                          className="w-full bg-[#2A2A2A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gray-400 mb-2">Company</label>
+                        <input
+                          type="text"
+                          name="company"
+                          value={newExperience.company}
+                          onChange={handleNewExperienceChange}
+                          className="w-full bg-[#2A2A2A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gray-400 mb-2">Period</label>
+                        <input
+                          type="text"
+                          name="period"
+                          value={newExperience.period}
+                          onChange={handleNewExperienceChange}
+                          className="w-full bg-[#2A2A2A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
+                          placeholder="e.g., 2020 - Present"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gray-400 mb-2">Description</label>
+                        <textarea
+                          name="description"
+                          value={newExperience.description}
+                          onChange={handleNewExperienceChange}
+                          className="w-full bg-[#2A2A2A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500 h-24"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleAddExperience}
+                        className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors"
+                      >
+                        Add Experience
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-4">
+                <button
+                  type="button"
+                  onClick={() => setIsSkillsEditOpen(false)}
                   className="px-6 py-2 text-gray-400 hover:text-white transition-colors"
                 >
                   Cancel
