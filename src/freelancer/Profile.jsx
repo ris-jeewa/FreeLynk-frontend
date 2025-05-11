@@ -1,15 +1,17 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FaUser, FaCode, FaBriefcase, FaStar, FaEdit, FaGithub, FaLinkedin, FaGlobe, FaTimes } from 'react-icons/fa';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export const FreelanceProfile = () => {
+  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const [activeTab, setActiveTab] = useState('personal');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isAboutMeEditOpen, setIsAboutMeEditOpen] = useState(false);
   const [isSkillsEditOpen, setIsSkillsEditOpen] = useState(false);
-  const [profileImage, setProfileImage] = useState("https://via.placeholder.com/150");
+  const [profileImage, setProfileImage] = useState(user?.picture || "https://via.placeholder.com/150");
   const fileInputRef = useRef(null);
   const [profileData, setProfileData] = useState({
-    name: 'Sarah Johnson',
+    name: user?.name || 'Sarah Johnson',
     title: 'Full Stack Developer',
     location: 'New York, USA',
     rating: '4.9',
@@ -21,7 +23,7 @@ export const FreelanceProfile = () => {
 
   const [aboutMeData, setAboutMeData] = useState({
     description: 'Full Stack Developer with 5+ years of experience in building scalable web applications. Passionate about creating elegant solutions to complex problems. Specialized in React, Node.js, and cloud technologies.',
-    email: 'sarah.johnson@example.com',
+    email: `${user?.nickname}@gmail.com` || 'sarah.johnson@example.com',
     phone: '+1 234 567 8900'
   });
 
@@ -49,6 +51,21 @@ export const FreelanceProfile = () => {
     period: '',
     description: ''
   });
+
+  useEffect(() => {
+    if (user) {
+      setProfileImage(user.picture || profileImage);
+      setProfileData(prev => ({
+        ...prev,
+        name: user.name || prev.name
+      }));
+      setAboutMeData(prev => ({
+        ...prev,
+        email: user.email || prev.email
+      }));
+    }
+    console.log(user,"user data");
+  }, [user]);
 
   const handleEditProfile = () => {
     setIsEditModalOpen(true);
