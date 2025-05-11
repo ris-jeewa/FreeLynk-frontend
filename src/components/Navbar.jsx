@@ -103,7 +103,7 @@ export const Navbar = () => {
                     <p className="text-sm text-gray-400">{user?.email}</p>
                   </div>
                   <Link
-                    to="/profile"
+                    to="/freelance-profile/1"
                     className="block px-4 py-2 text-white hover:bg-[#3A3A3A] transition-colors"
                     onClick={() => setIsProfileMenuOpen(false)}
                   >
