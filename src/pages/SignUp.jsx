@@ -7,8 +7,23 @@ const SignUp = () => {
   const [selectedRole, setSelectedRole] = useState(null);
   const { loginWithRedirect } = useAuth0();
 
+  
   const handleRoleSelect = (role) => {
     setSelectedRole(role);
+  };
+
+  const handleContinue = () => {
+    if (selectedRole) {
+      loginWithRedirect({
+        authorizationParams: {
+          screen_hint: 'signup',
+        },
+        appState: {
+          returnTo: '/profile-setup', // Redirect after signup
+          role: selectedRole,
+        }
+      });
+    }
   };
 
   return (
@@ -61,12 +76,12 @@ const SignUp = () => {
 
         {selectedRole && (
           <div className="mt-8">
-            <Link
-              to={`/register/${selectedRole}`}
+            <button
+              onClick={handleContinue}
               className="w-full flex justify-center py-3 px-4 border border-transparent rounded-full text-lg font-semibold text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors"
             >
               Continue as {selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)}
-            </Link>
+            </button>
           </div>
         )}
 
