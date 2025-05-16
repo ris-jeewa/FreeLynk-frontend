@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FaUser, FaCode, FaBriefcase, FaStar, FaEdit, FaGithub, FaLinkedin, FaGlobe, FaTimes } from 'react-icons/fa';
 import { useAuth0 } from '@auth0/auth0-react';
+import axios from 'axios';
 
 export const FreelanceProfile = () => {
   const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
@@ -93,6 +94,15 @@ export const FreelanceProfile = () => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
+      axios.put(`http://localhost:8080/api/users/1/image`,{
+        imageUrl: file.name
+      })
+        .then(response => {
+          console.log("Image updated successfully", response.data);
+        })
+        .catch(error => {
+          console.error("Error updating image", error);
+        });
       reader.onloadend = () => {
         setProfileImage(reader.result);
       };
