@@ -2,6 +2,15 @@ import React, { useState, useRef, useEffect } from 'react';
 import { FaUser, FaCode, FaBriefcase, FaStar, FaEdit, FaGithub, FaLinkedin, FaGlobe, FaTimes } from 'react-icons/fa';
 import { useAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
+import { AdvancedImage } from '@cloudinary/react';
+import { Cloudinary } from '@cloudinary/url-gen';
+
+// Initialize Cloudinary
+const cld = new Cloudinary({
+  cloud: {
+    cloudName: import.meta.env.CLOUDINARY_CLOUD_NAME // Replace with your cloud name
+  }
+});
 
 export const FreelanceProfile = () => {
   const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
@@ -90,23 +99,31 @@ export const FreelanceProfile = () => {
     fileInputRef.current.click();
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      axios.put(`http://localhost:8080/api/users/1/image`,{
-        imageUrl: file.name
-      })
-        .then(response => {
-          console.log("Image updated successfully", response.data);
-        })
-        .catch(error => {
-          console.error("Error updating image", error);
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset','freelynk'); // Replace with your upload preset
+
+      try {
+        const response = await axios.post(
+          `https://api.cloudinary.com/v1_1/${import.meta.env.CLOUDINARY_CLOUD_NAME}/image/upload`,
+          formData
+        );
+        
+        const imageUrl = response.data.secure_url;
+        setProfileImage(imageUrl);
+        
+        // Update the image URL in your backend
+        await axios.put(`http://localhost:8080/api/users/1/image`, {
+          imageUrl: imageUrl
         });
-      reader.onloadend = () => {
-        setProfileImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+        
+        console.log("Image uploaded successfully to Cloudinary");
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
     }
   };
 
