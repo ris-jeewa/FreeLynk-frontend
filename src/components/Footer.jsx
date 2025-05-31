@@ -11,6 +11,8 @@ const Footer = () => {
           <Link to="/about" className="hover:text-orange-500 text-gray-400 transition-colors">About Us</Link>
           <Link to="/membership" className="hover:text-orange-500 text-gray-400 transition-colors">Membership</Link>
           <Link to="/careers" className="hover:text-orange-500 text-gray-400 transition-colors">Careers</Link>
+          <Link to="/privacy-policy" className="hover:text-orange-500 text-gray-400 transition-colors">Privacy Policy</Link>
+          <Link to="/terms" className="hover:text-orange-500 text-gray-400 transition-colors">Terms & Conditions</Link>
         </div>
         <div className="flex gap-4">
           <a href="https://github.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-orange-500 transition-colors"><FaGithub size={20} /></a>
