@@ -1,11 +1,95 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaBuilding, FaUser, FaBriefcase, FaEdit } from 'react-icons/fa';
+import { useAuth0 } from '@auth0/auth0-react';
+import axios from 'axios';
 import { PersonalInfo } from './components/PersonalInfo';
 import { CompanyDetails } from './components/CompanyDetails';
 import { Projects } from './components/Projects';
 
 const ClientProfile = () => {
+  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const [activeTab, setActiveTab] = useState('personal');
+  const [profileData, setProfileData] = useState({
+    name: user?.name || 'John Doe',
+    company: 'Tech Solutions Inc.',
+    location: 'New York, USA',
+    isVerified: true
+  });
+
+  const [personalInfo, setPersonalInfo] = useState({
+    fullName: user?.name || 'John Doe',
+    email: user?.email || 'john.doe@example.com',
+    phone: '+1 234 567 8900',
+    location: 'New York, USA'
+  });
+
+  const [companyDetails, setCompanyDetails] = useState({
+    companyName: 'Tech Solutions Inc.',
+    industry: 'Technology',
+    companySize: '50-200 employees',
+    website: 'https://techsolutions.com'
+  });
+
+  const [projects, setProjects] = useState([
+    {
+      title: 'E-commerce Website Development',
+      description: 'Looking for a full-stack developer to build an e-commerce platform...',
+      budget: '$5,000 - $10,000',
+      postedDate: '2 days ago'
+    }
+  ]);
+
+  useEffect(() => {
+    const fetchClientData = async () => {
+      try {
+        const token = await getAccessTokenSilently();
+        const response = await axios.get('http://localhost:8080/api/clients/profile', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        
+        if (response.data) {
+          setProfileData(prev => ({
+            ...prev,
+            name: response.data.name || user?.name,
+            company: response.data.company,
+            location: response.data.location
+          }));
+
+          setPersonalInfo(prev => ({
+            ...prev,
+            fullName: response.data.name || user?.name,
+            email: response.data.email || user?.email,
+            phone: response.data.phone,
+            location: response.data.location
+          }));
+
+          setCompanyDetails(prev => ({
+            ...prev,
+            companyName: response.data.companyName,
+            industry: response.data.industry,
+            companySize: response.data.companySize,
+            website: response.data.website
+          }));
+
+          if (response.data.projects) {
+            setProjects(response.data.projects);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching client data:', error);
+      }
+    };
+
+    if (isAuthenticated) {
+      fetchClientData();
+    }
+  }, [isAuthenticated, user, getAccessTokenSilently]);
+
+  const handleEditProfile = () => {
+    // Implement edit profile functionality
+  };
 
   return (
     <div className="min-h-screen bg-[#1A1A1A] py-12">
@@ -16,7 +100,7 @@ const ClientProfile = () => {
             <div className="flex items-center space-x-6">
               <div className="relative">
                 <img
-                  src="https://via.placeholder.com/150"
+                  src={user?.picture || "https://via.placeholder.com/150"}
                   alt="Profile"
                   className="w-32 h-32 rounded-full border-4 border-orange-500"
                 />
@@ -25,16 +109,21 @@ const ClientProfile = () => {
                 </button>
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-white">John Doe</h1>
-                <p className="text-gray-400">Client at Tech Solutions Inc.</p>
+                <h1 className="text-3xl font-bold text-white">{profileData.name}</h1>
+                <p className="text-gray-400">Client at {profileData.company}</p>
                 <div className="flex items-center mt-2">
-                  <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm">
-                    Verified Client
-                  </span>
+                  {profileData.isVerified && (
+                    <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm">
+                      Verified Client
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
-            <button className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors">
+            <button 
+              onClick={handleEditProfile}
+              className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors"
+            >
               Edit Profile
             </button>
           </div>
@@ -80,15 +169,15 @@ const ClientProfile = () => {
         {/* Tab Content */}
         <div className="bg-[#2A2A2A] rounded-lg p-8">
           {activeTab === 'personal' && (
-            <PersonalInfo />
+            <PersonalInfo personalInfo={personalInfo} setPersonalInfo={setPersonalInfo} />
           )}
 
           {activeTab === 'company' && (
-            <CompanyDetails />
+            <CompanyDetails companyDetails={companyDetails} setCompanyDetails={setCompanyDetails} />
           )}
 
           {activeTab === 'projects' && (
-            <Projects />
+            <Projects projects={projects} setProjects={setProjects} />
           )}
         </div>
       </div>
