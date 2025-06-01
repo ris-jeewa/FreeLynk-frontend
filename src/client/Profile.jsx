@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { FaBuilding, FaUser, FaBriefcase, FaEdit } from 'react-icons/fa';
+import { PersonalInfo } from './components/PersonalInfo';
+import { CompanyDetails } from './components/CompanyDetails';
+import { Projects } from './components/Projects';
 
 const ClientProfile = () => {
   const [activeTab, setActiveTab] = useState('personal');
@@ -77,101 +80,15 @@ const ClientProfile = () => {
         {/* Tab Content */}
         <div className="bg-[#2A2A2A] rounded-lg p-8">
           {activeTab === 'personal' && (
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-white mb-6">Personal Information</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-gray-400 mb-2">Full Name</label>
-                  <input
-                    type="text"
-                    value="John Doe"
-                    className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-400 mb-2">Email</label>
-                  <input
-                    type="email"
-                    value="john.doe@example.com"
-                    className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-400 mb-2">Phone</label>
-                  <input
-                    type="tel"
-                    value="+1 234 567 8900"
-                    className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-400 mb-2">Location</label>
-                  <input
-                    type="text"
-                    value="New York, USA"
-                    className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
-                  />
-                </div>
-              </div>
-            </div>
+            <PersonalInfo />
           )}
 
           {activeTab === 'company' && (
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-white mb-6">Company Details</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-gray-400 mb-2">Company Name</label>
-                  <input
-                    type="text"
-                    value="Tech Solutions Inc."
-                    className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-400 mb-2">Industry</label>
-                  <input
-                    type="text"
-                    value="Technology"
-                    className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-400 mb-2">Company Size</label>
-                  <input
-                    type="text"
-                    value="50-200 employees"
-                    className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-400 mb-2">Website</label>
-                  <input
-                    type="url"
-                    value="https://techsolutions.com"
-                    className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
-                  />
-                </div>
-              </div>
-            </div>
+            <CompanyDetails />
           )}
 
           {activeTab === 'projects' && (
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-white mb-6">Posted Projects</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* Project Card */}
-                <div className="bg-[#1A1A1A] rounded-lg p-6">
-                  <h3 className="text-xl font-semibold text-white mb-2">E-commerce Website Development</h3>
-                  <p className="text-gray-400 mb-4">Looking for a full-stack developer to build an e-commerce platform...</p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-orange-500">$5,000 - $10,000</span>
-                    <span className="text-gray-400">Posted 2 days ago</span>
-                  </div>
-                </div>
-                {/* Add more project cards here */}
-              </div>
-            </div>
+            <Projects />
           )}
         </div>
       </div>
