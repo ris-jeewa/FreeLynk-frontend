@@ -158,8 +158,10 @@ export const FreelanceProfile = () => {
       // Update profile picture URL in backend
 
       console.log(imageUrl,"image url/////////////////////////////////////");
-      axios.put(`http://localhost:8080/api/users/1/image`, {
-        imageUrl
+      axios.put(`http://localhost:8080/api/users/1/image`,imageUrl,{
+        headers: {
+          'Content-Type': 'application/json'
+        }
       })
       .then(response => {
         console.log("Profile image updated successfully", response.data);
