@@ -1,11 +1,40 @@
-import React from "react";
-import { Form, Input, Button, Typography, Divider, Space } from "antd";
+import React, { useState } from "react";
+import { Form, Input, Button, Typography, Divider, Space, message } from "antd";
 import { GoogleOutlined, AppleOutlined } from "@ant-design/icons";
+import axios from "axios";
 import "antd/dist/reset.css";
 
 const Login = () => {
-  const onFinish = (values) => {
-    console.log("Form Values:", values);
+  const [loading, setLoading] = useState(false);
+
+  const onFinish = async (values) => {
+    console.log("+++++++++++++++++++++++", values);
+    setLoading(true);
+    try {
+      const response = await axios.post('/login', values, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      message.success('Login successful!');
+      console.log('Login response:', response.data);
+      // Handle successful login (e.g., redirect, store token, etc.)
+    } catch (error) {
+      console.error('Login error:', error);
+      if (error.response) {
+        // Server responded with error status
+        message.error(error.response.data.message || 'Login failed. Please try again.');
+      } else if (error.request) {
+        // Network error
+        message.error('Network error. Please check your connection and try again.');
+      } else {
+        // Other error
+        message.error('An error occurred. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -32,21 +61,21 @@ const Login = () => {
             <Form.Item
               name="fullname"
               label="Fullname"
-              rules={[{ required: true }]}
+              rules={[{ required: true, message: 'Please enter your full name!' }]}
             >
               <Input size="large" placeholder="John Doe" />
             </Form.Item>
             <Form.Item
               name="email"
               label="Email"
-              rules={[{ required: true, type: "email" }]}
+              rules={[{ required: true, type: "email", message: 'Please enter a valid email!' }]}
             >
               <Input size="large" placeholder="example@mail.com" />
             </Form.Item>
             <Form.Item
               name="password"
               label="Password"
-              rules={[{ required: true }]}
+              rules={[{ required: true, message: 'Please enter your password!' }]}
             >
               <Input.Password size="large" placeholder="Enter password" />
             </Form.Item>
@@ -57,6 +86,7 @@ const Login = () => {
                 block
                 size="large"
                 className="bg-yellow-400 border-none"
+                loading={loading}
               >
                 Submit
               </Button>
