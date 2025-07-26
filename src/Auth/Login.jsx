@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Form, Input, Button, Typography, Divider, Space, message } from "antd";
-import { GoogleOutlined, AppleOutlined } from "@ant-design/icons";
+import { Form, Input, Button, Divider, Space, message } from "antd";
+import { GoogleOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import "antd/dist/reset.css";
 
@@ -8,7 +9,6 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const onFinish = async (values) => {
-    console.log("+++++++++++++++++++++++", values);
     setLoading(true);
     try {
       const response = await axios.post('/login', values, {
@@ -16,20 +16,14 @@ const Login = () => {
           'Content-Type': 'application/json',
         },
       });
-
       message.success('Login successful!');
-      console.log('Login response:', response.data);
       // Handle successful login (e.g., redirect, store token, etc.)
     } catch (error) {
-      console.error('Login error:', error);
       if (error.response) {
-        // Server responded with error status
         message.error(error.response.data.message || 'Login failed. Please try again.');
       } else if (error.request) {
-        // Network error
         message.error('Network error. Please check your connection and try again.');
       } else {
-        // Other error
         message.error('An error occurred. Please try again.');
       }
     } finally {
@@ -50,21 +44,14 @@ const Login = () => {
         </div>
         {/* Right Form Section */}
         <div className="w-1/2 justify-center bg-gradient-to-br from-yellow-50 to-white p-5">
-          <p className="text-black text-xl">Create an Account</p>
+          <p className="text-black text-xl">Login to Your Account</p>
           <div className="flex gap-3">
             <p className="text-gray-500  text-sm mt-2">
-              Already have an account?
+              Don't have an account?
             </p>
-            <a href="#" className="text-blue-700">Sign In</a>
+            <Link to="/register" className="text-blue-700">Register</Link>
           </div>
           <Form layout="vertical" onFinish={onFinish} className="mt-6">
-            <Form.Item
-              name="fullname"
-              label="Fullname"
-              rules={[{ required: true, message: 'Please enter your full name!' }]}
-            >
-              <Input size="large" placeholder="John Doe" />
-            </Form.Item>
             <Form.Item
               name="email"
               label="Email"
@@ -88,18 +75,15 @@ const Login = () => {
                 className="bg-yellow-400 border-none"
                 loading={loading}
               >
-                Submit
+                Login
               </Button>
             </Form.Item>
           </Form>
 
-          <Divider plain>or Sign Up with</Divider>
+          <Divider plain>or Login with</Divider>
           <Space size="middle" className="w-full flex justify-center">
             <Button icon={<GoogleOutlined />} shape="round">
               Google
-            </Button>
-            <Button icon={<AppleOutlined />} shape="round">
-              Apple
             </Button>
           </Space>
         </div>
