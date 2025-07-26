@@ -1,21 +1,36 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { Home } from "./pages/Home";
-import Login from "./Login/Login";
+import Login from "./Auth/Login";
 import { FreelanceProfile } from "./freelancer/Profile";
 import AboutUs from "./pages/AboutUs";
 import Layout from "./components/Layout";
+import Register from "./Auth/Register";
 
 const App = () => {
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/freelance-profile/:id" element={<FreelanceProfile />} />
-        <Route path="/about" element={<AboutUs />} />
-      </Routes>
-    </Layout>
+    <Routes>
+      {/* Auth pages without Layout */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      
+      {/* Other pages with Layout */}
+      <Route path="/" element={
+        <Layout>
+          <Home />
+        </Layout>
+      } />
+      <Route path="/freelance-profile/:id" element={
+        <Layout>
+          <FreelanceProfile />
+        </Layout>
+      } />
+      <Route path="/about" element={
+        <Layout>
+          <AboutUs />
+        </Layout>
+      } />
+    </Routes>
   );
 };
 
