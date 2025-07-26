@@ -1,11 +1,11 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { Home } from "./pages/Home";
-import Login from "./Login/Login";
+import Login from "./Auth/Login";
 import { FreelanceProfile } from "./freelancer/Profile";
 import AboutUs from "./pages/AboutUs";
 import Layout from "./components/Layout";
-import Register from "./Login/Register";
+import Register from "./Auth/Register";
 
 const App = () => {
   return (
