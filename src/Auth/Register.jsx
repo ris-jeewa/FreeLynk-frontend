@@ -92,9 +92,6 @@ const Register = () => {
             <Button icon={<GoogleOutlined />} shape="round">
               Google
             </Button>
-            <Button icon={<AppleOutlined />} shape="round">
-              Apple
-            </Button>
           </Space>
         </div>
       </div>
