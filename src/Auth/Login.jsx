@@ -2,22 +2,22 @@ import React, { useState } from "react";
 import { Form, Input, Button, Divider, Space, message } from "antd";
 import { GoogleOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import "antd/dist/reset.css";
+import { login } from "../services/authService";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      const response = await axios.post('/login', values, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await login(values);
+      console.log(response);
+
       message.success('Login successful!');
-      // Handle successful login (e.g., redirect, store token, etc.)
+      navigate('/freelance-profile/1');
     } catch (error) {
       if (error.response) {
         message.error(error.response.data.message || 'Login failed. Please try again.');
