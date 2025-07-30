@@ -1,7 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export const Navbar = () => {
+  const { isAuthenticated } = useAuth0();
+
+
   return (
     <header className="fixed w-full z-10 bg-[#1A1A1A] border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-8 py-4">
@@ -14,9 +18,13 @@ export const Navbar = () => {
               <Link to="/about" className="text-white hover:text-orange-500 transition-colors">About Us</Link>
               <Link to="/membership" className="text-white hover:text-orange-500 transition-colors">Membership</Link>
               <Link to="/careers" className="text-white hover:text-orange-500 transition-colors">Careers</Link>
-              <Link to="/login" className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors">
-                Lets Go!
-              </Link>
+              {isAuthenticated ? (
+                <Link to="/freelance-profile/1" className="text-white hover:text-orange-500 transition-colors">Profile</Link>
+              ) : (
+                <Link to="/login" className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors">
+                  Lets Go!
+                </Link>
+              )}
             </div>
           </nav>
         </div>
