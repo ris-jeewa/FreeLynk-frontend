@@ -11,9 +11,12 @@
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.3.0",
+    "@react-oauth/google": "^0.12.2",
     "@tailwindcss/vite": "^4.1.4",
     "antd": "^5.24.7",
     "axios": "^1.11.0",
+    "@cloudinary/react": "^1.14.3",
+    "@cloudinary/url-gen": "^1.21.0",
     "gsap": "^3.12.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
