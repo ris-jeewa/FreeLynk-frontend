@@ -1,14 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Input, Button, Divider, Space, message } from "antd";
 import { GoogleOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "antd/dist/reset.css";
 import { login } from "../services/authService";
-import { useNavigate } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { loginWithRedirect, isAuthenticated, user, isLoading } = useAuth0();
+
+  // Redirect to freelancer profile if already authenticated
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      message.success('Login successful!');
+      navigate('/freelance-profile/1');
+    }
+  }, [isAuthenticated, user, navigate]);
 
   const onFinish = async (values) => {
     setLoading(true);
@@ -30,6 +39,26 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  const handleGoogleLogin = () => {
+    loginWithRedirect({
+      authorizationParams: {
+        connection: 'google-oauth2'
+      }
+    });
+  };
+
+  // Show loading while Auth0 is initializing
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -82,7 +111,12 @@ const Login = () => {
 
           <Divider plain>or Login with</Divider>
           <Space size="middle" className="w-full flex justify-center">
-            <Button icon={<GoogleOutlined />} shape="round">
+            <Button 
+              icon={<GoogleOutlined />} 
+              shape="round" 
+              onClick={handleGoogleLogin}
+              className="bg-white border-gray-300 hover:bg-gray-50"
+            >
               Google
             </Button>
           </Space>
