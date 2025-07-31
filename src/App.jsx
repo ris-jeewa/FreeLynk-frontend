@@ -6,6 +6,8 @@ import { FreelanceProfile } from "./freelancer/Profile";
 import AboutUs from "./pages/AboutUs";
 import Layout from "./components/Layout";
 import Register from "./Auth/Register";
+import Membership from "./pages/Membership";
+import Careers from "./pages/Careers";
 
 const App = () => {
   return (
@@ -28,6 +30,16 @@ const App = () => {
       <Route path="/about" element={
         <Layout>
           <AboutUs />
+        </Layout>
+      } />
+      <Route path="/membership" element={
+        <Layout>
+          <Membership />
+        </Layout>
+      } />
+      <Route path="/careers" element={
+        <Layout>
+          <Careers />
         </Layout>
       } />
     </Routes>
