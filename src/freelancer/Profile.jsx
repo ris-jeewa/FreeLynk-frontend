@@ -11,6 +11,7 @@ import SkillsTab from './components/SkillsTab';
 import PortfolioTab from './components/PortfolioTab';
 import { EditAboutMe } from './components/EditAboutMe';
 import { EditSkills } from './components/EditSkills';
+import { EditProfileDialog } from './components/EditProfileDialog';
 
 export const FreelanceProfile = () => {
   const { user, isAuthenticated, getAccessTokenSilently, logout } = useAuth0();
@@ -107,18 +108,8 @@ export const FreelanceProfile = () => {
     setIsEditModalOpen(true);
   };
 
-  const handleSaveProfile = (e) => {
-    e.preventDefault();
-    // Here you would typically make an API call to save the data
+  const handleCloseEditProfile = () => {
     setIsEditModalOpen(false);
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setProfileData(prev => ({
-      ...prev,
-      [name]: value
-    }));
   };
 
   const handleImageClick = () => {
@@ -280,9 +271,12 @@ export const FreelanceProfile = () => {
         </div>
 
         {/* Edit Profile Modal */}
-        {/* {isEditModalOpen && (
-          
-        )} */}
+        <EditProfileDialog
+          profileData={profileData}
+          setProfileData={setProfileData}
+          isOpen={isEditModalOpen}
+          onClose={handleCloseEditProfile}
+        />
 
         {/* Tabs */}
         <div className="flex space-x-4 mb-8 border-b border-gray-700 overflow-x-auto">
