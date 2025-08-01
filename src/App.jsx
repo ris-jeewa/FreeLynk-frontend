@@ -8,6 +8,7 @@ import Layout from "./components/Layout";
 import Register from "./Auth/Register";
 import Membership from "./pages/Membership";
 import Careers from "./pages/Careers";
+import TestCheckBox from "./pages/TestCheckBox";
 
 const App = () => {
   return (
@@ -40,6 +41,12 @@ const App = () => {
       <Route path="/careers" element={
         <Layout>
           <Careers />
+        </Layout>
+      } />
+
+      <Route path="/checkbox" element={
+        <Layout>
+          <TestCheckBox />
         </Layout>
       } />
     </Routes>
