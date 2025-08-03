@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "antd/dist/reset.css";
 import { login } from "../services/authService";
 import { useAuth0 } from "@auth0/auth0-react";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -14,7 +15,7 @@ const Login = () => {
   // Redirect to freelancer profile if already authenticated
   useEffect(() => {
     if (isAuthenticated && user) {
-      message.success('Login successful!');
+      toast.success('Login successful!');
       navigate('/freelance-profile/1');
     }
   }, [isAuthenticated, user, navigate]);
@@ -25,27 +26,33 @@ const Login = () => {
       const response = await login(values);
       console.log(response);
 
-      message.success('Login successful!');
-      navigate('/freelance-profile/1');
+      // Show success message with user info
+      toast.success('Login successful!');
+      
+      // Small delay to show the success message before navigation
+      setTimeout(() => {
+        navigate('/freelance-profile/1');
+      }, 1500);
+
     } catch (error) {
-      if (error.response) {
-        message.error(error.response.data.message || 'Login failed. Please try again.');
-      } else if (error.request) {
-        message.error('Network error. Please check your connection and try again.');
-      } else {
-        message.error('An error occurred. Please try again.');
-      }
+      console.error('Login error:', error);
+      toast.error('Login failed. Please try again.',error);
+      
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleLogin = () => {
-    loginWithRedirect({
-      authorizationParams: {
-        connection: 'google-oauth2'
-      }
-    });
+    try {
+      loginWithRedirect({
+        authorizationParams: {
+          connection: 'google-oauth2'
+        }
+      });
+    } catch (error) {
+      toast.error('Google login failed. Please try again.',error);
+    }
   };
 
   // Show loading while Auth0 is initializing
@@ -84,14 +91,20 @@ const Login = () => {
             <Form.Item
               name="email"
               label="Email"
-              rules={[{ required: true, type: "email", message: 'Please enter a valid email!' }]}
+              rules={[
+                { required: true, message: 'Please enter your email!' },
+                { type: "email", message: 'Please enter a valid email address!' }
+              ]}
             >
               <Input size="large" placeholder="example@mail.com" />
             </Form.Item>
             <Form.Item
               name="password"
               label="Password"
-              rules={[{ required: true, message: 'Please enter your password!' }]}
+              rules={[
+                { required: true, message: 'Please enter your password!' },
+                { min: 6, message: 'Password must be at least 6 characters!' }
+              ]}
             >
               <Input.Password size="large" placeholder="Enter password" />
             </Form.Item>
@@ -101,10 +114,10 @@ const Login = () => {
                 htmlType="submit"
                 block
                 size="large"
-                className="bg-yellow-400 border-none"
+                className="bg-yellow-400 border-none hover:bg-yellow-500"
                 loading={loading}
               >
-                Login
+                {loading ? 'Signing In...' : 'Login'}
               </Button>
             </Form.Item>
           </Form>
@@ -116,6 +129,7 @@ const Login = () => {
               shape="round" 
               onClick={handleGoogleLogin}
               className="bg-white border-gray-300 hover:bg-gray-50"
+              disabled={loading}
             >
               Google
             </Button>

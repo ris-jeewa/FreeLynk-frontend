@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App.jsx";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { BrowserRouter } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
 const root = createRoot(document.getElementById("root"));
 
@@ -22,6 +23,7 @@ root.render(
       }}
     >
       <App />
+      <Toaster position="bottom-right" />
     </Auth0Provider>
   </BrowserRouter>
 );
