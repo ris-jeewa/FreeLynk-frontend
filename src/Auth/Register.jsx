@@ -4,14 +4,12 @@ import { GoogleOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import "antd/dist/reset.css";
 import { register } from "../services/authService";
-
+import toast from "react-hot-toast";
 
 const Register = () => {
   const [loading, setLoading] = useState(false);
   const [selectedRole, setSelectedRole] = useState('CLIENT');
   const navigate = useNavigate();
-
-
 
   const onFinish = async (values) => {
     setLoading(true);
@@ -37,14 +35,7 @@ const Register = () => {
     } catch (error) {
       console.error('Registration error:', error);
       toast.error('Registration failed. Please try again.',error);
-      // Enhanced error handling with specific messages
-      if (error.response) {
-        message.error(error.response.data.message || 'Registration failed. Please try again.');
-      } else if (error.request) {
-        ToastUtils.registrationError('network_error');
-      } else {
-        ToastUtils.registrationError('unknown', 'An unexpected error occurred. Please try again or contact support if the problem persists.');
-      }
+      
     } finally {
       setLoading(false);
     }
@@ -53,7 +44,7 @@ const Register = () => {
   const handleRoleSelect = (role) => {
     setSelectedRole(role);
     const roleText = role === 'FREELANCER' ? 'freelancer' : 'client';
-    toast.info(`You've selected to register as a ${roleText}.`);
+    toast.custom(`You've selected to register as a ${roleText}.`);
   };
 
   return (
