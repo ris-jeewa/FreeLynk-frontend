@@ -9,6 +9,7 @@ import Register from "./Auth/Register";
 import Membership from "./pages/Membership";
 import Careers from "./pages/Careers";
 import TestCheckBox from "./pages/TestCheckBox";
+import { ClientProfile } from "./client/Profile";
 
 const App = () => {
   return (
@@ -26,6 +27,11 @@ const App = () => {
       <Route path="/freelance-profile/:id" element={
         <Layout>
           <FreelanceProfile />
+        </Layout>
+      } />
+      <Route path="/client-profile/:id" element={
+        <Layout>
+          <ClientProfile />
         </Layout>
       } />
       <Route path="/about" element={
