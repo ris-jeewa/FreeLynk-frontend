@@ -12,6 +12,7 @@ import PortfolioTab from './components/PortfolioTab';
 import { EditAboutMe } from './components/EditAboutMe';
 import { EditSkills } from './components/EditSkills';
 import { EditProfileDialog } from './components/EditProfileDialog';
+import { getProfileData } from '../services/userProfileService';
 
 export const FreelanceProfile = () => {
   const { user, isAuthenticated, getAccessTokenSilently, logout } = useAuth0();
@@ -176,7 +177,7 @@ export const FreelanceProfile = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/users/1`);
+        const response = await getProfileData();
         console.log(response.data.profilePictureUrl,"user data tika me enwa");
         
         if (response.data.profilePictureUrl) {

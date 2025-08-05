@@ -4,7 +4,7 @@ import { GoogleOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import "antd/dist/reset.css";
 import { register } from "../services/authService";
-
+import toast from "react-hot-toast";
 
 const Register = () => {
   const [loading, setLoading] = useState(false);
@@ -19,19 +19,23 @@ const Register = () => {
         role: selectedRole
       };
 
-      console.log(registrationData,"registrationData");
+      console.log(registrationData, "registrationData");
       const res = await register(registrationData);
-      message.success('Registration successful');
+      
+      // Show success message with role-specific information
+      toast.success('Registration successful!');
+      
       console.log('Response:', res.data);
-      navigate('/login');
+      
+      // Small delay to show the success message before navigation
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+
     } catch (error) {
-      if (error.response) {
-        message.error(error.response.data.message || 'Registration failed. Please try again.');
-      } else if (error.request) {
-        message.error('Network error. Please check your connection and try again.');
-      } else {
-        message.error('An error occurred. Please try again.');
-      }
+      console.error('Registration error:', error);
+      toast.error('Registration failed. Please try again.',error);
+      
     } finally {
       setLoading(false);
     }
@@ -39,6 +43,8 @@ const Register = () => {
 
   const handleRoleSelect = (role) => {
     setSelectedRole(role);
+    const roleText = role === 'FREELANCER' ? 'freelancer' : 'client';
+    toast.custom(`You've selected to register as a ${roleText}.`);
   };
 
   return (
@@ -71,8 +77,9 @@ const Register = () => {
                   type={selectedRole === 'CLIENT' ? 'primary' : 'default'}
                   block
                   size="middle"
-                  className={selectedRole === 'CLIENT' ? 'bg-blue-500 border-none' : 'border-gray-300'}
+                  className={selectedRole === 'CLIENT' ? 'bg-blue-500 border-none hover:bg-blue-600' : 'border-gray-300 hover:border-blue-300'}
                   onClick={() => handleRoleSelect('CLIENT')}
+                  disabled={loading}
                 >
                   Client
                 </Button>
@@ -80,8 +87,9 @@ const Register = () => {
                   type={selectedRole === 'FREELANCER' ? 'primary' : 'default'}
                   block
                   size="middle"
-                  className={selectedRole === 'FREELANCER' ? 'bg-green-500 border-none' : 'border-gray-300'}
+                  className={selectedRole === 'FREELANCER' ? 'bg-green-500 border-none hover:bg-green-600' : 'border-gray-300 hover:border-green-300'}
                   onClick={() => handleRoleSelect('FREELANCER')}
+                  disabled={loading}
                 >
                   Freelancer
                 </Button>
@@ -90,8 +98,12 @@ const Register = () => {
 
             <Form.Item
               name="name"
-              label="Name"
-              rules={[{ required: true, message: 'Please enter your full name!' }]}
+              label="Full Name"
+              rules={[
+                { required: true, message: 'Please enter your full name!' },
+                { min: 2, message: 'Name must be at least 2 characters!' },
+                { max: 50, message: 'Name cannot exceed 50 characters!' }
+              ]}
               className="mb-2"
             >
               <Input size="middle" placeholder="John Doe" />
@@ -99,7 +111,10 @@ const Register = () => {
             <Form.Item
               name="email"
               label="Email"
-              rules={[{ required: true, type: "email", message: 'Please enter a valid email!' }]}
+              rules={[
+                { required: true, message: 'Please enter your email!' },
+                { type: "email", message: 'Please enter a valid email address!' }
+              ]}
               className="mb-2"
             >
               <Input size="middle" placeholder="example@mail.com" />
@@ -107,7 +122,15 @@ const Register = () => {
             <Form.Item
               name="password"
               label="Password"
-              rules={[{ required: true, message: 'Please enter your password!' }]}
+              rules={[
+                { required: true, message: 'Please enter your password!' },
+                { min: 6, message: 'Password must be at least 6 characters!' },
+                { max: 50, message: 'Password cannot exceed 50 characters!' },
+                {
+                  pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+                  message: 'Password must contain at least one uppercase letter, one lowercase letter, and one number!'
+                }
+              ]}
               className="mb-3"
             >
               <Input.Password size="middle" placeholder="Enter password" />
@@ -118,17 +141,23 @@ const Register = () => {
                 htmlType="submit"
                 block
                 size="middle"
-                className="bg-yellow-400 border-none"
+                className="bg-yellow-400 border-none hover:bg-yellow-500"
                 loading={loading}
               >
-                Register
+                {loading ? 'Creating Account...' : 'Register'}
               </Button>
             </Form.Item>
           </Form>
 
           <Divider plain className="my-4">or Sign Up with</Divider>
           <div className="flex justify-center">
-            <Button icon={<GoogleOutlined />} shape="round" size="middle">
+            <Button 
+              icon={<GoogleOutlined />} 
+              shape="round" 
+              size="middle"
+              disabled={loading}
+              className="hover:bg-gray-50"
+            >
               Google
             </Button>
           </div>
