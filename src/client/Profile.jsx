@@ -74,11 +74,11 @@ export const ClientProfile = () => {
           <Col xs={24} md={12}>
             <Card style={{ textAlign: "center" }} className="flex ">
               <div>
-                <Avatar
-                  size={120}
-                  src="https://i.pravatar.cc/300" // Replace with your profile image link
-                  style={{ marginBottom: "1rem" }}
-                />
+                                       <Avatar
+                         size={120}
+                         src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop&crop=face"
+                         style={{ marginBottom: "1rem" }}
+                       />
                 <div className="text-left ">
                   <Title level={3}>{profileData.name}</Title>
                   <div className="flex gap-10">
