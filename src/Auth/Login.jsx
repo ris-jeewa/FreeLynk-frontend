@@ -6,6 +6,7 @@ import "antd/dist/reset.css";
 import { login } from "../services/authService";
 import { useAuth0 } from "@auth0/auth0-react";
 import toast from "react-hot-toast";
+import { setAuthData } from "../utils/authUtils";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -24,19 +25,20 @@ const Login = () => {
     setLoading(true);
     try {
       const response = await login(values);
-      console.log(response);
+      console.log('Login response:', response);
 
-      // Show success message with user info
-      toast.success('Login successful!');
+      // Show success message
+      toast.success('Login successful! Redirecting to profile...');
       
-      // Small delay to show the success message before navigation
-      setTimeout(() => {
-        navigate('/freelance-profile/1');
-      }, 1500);
+      // Store authentication data using utility function
+      setAuthData(response.data?.token, response.data?.user);
+      
+      // Navigate immediately after successful login
+      navigate('/freelance-profile/1');
 
     } catch (error) {
       console.error('Login error:', error);
-      toast.error('Login failed. Please try again.',error);
+      toast.error('Login failed. Please try again.');
       
     } finally {
       setLoading(false);
