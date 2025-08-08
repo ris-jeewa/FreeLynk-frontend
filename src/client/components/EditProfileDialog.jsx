@@ -71,12 +71,12 @@ export const EditProfileDialog = ({ isOpen, onClose, profileData, onSave }) => {
       >
         {/* Profile Image Section */}
         <div className="text-center mb-6">
-          <Avatar
-            size={100}
-            src="https://i.pravatar.cc/300"
-            icon={<UserOutlined />}
-            className="mb-4"
-          />
+                           <Avatar
+                   size={100}
+                   src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop&crop=face"
+                   icon={<UserOutlined />}
+                   className="mb-4"
+                 />
           <div>
             <Upload
               name="avatar"
