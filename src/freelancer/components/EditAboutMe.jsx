@@ -30,7 +30,7 @@ export const EditAboutMe = ({ aboutMeData, setAboutMeData , setIsAboutMeEditOpen
             <label className="block text-gray-400 mb-2">Description</label>
             <textarea
               name="description"
-              value={aboutMeData.description}
+              value={aboutMeData.description || ''}
               onChange={handleAboutMeChange}
               className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500 h-32"
             />
@@ -41,7 +41,7 @@ export const EditAboutMe = ({ aboutMeData, setAboutMeData , setIsAboutMeEditOpen
               <input
                 type="email"
                 name="email"
-                value={aboutMeData.email}
+                value={aboutMeData.email || ''}
                 onChange={handleAboutMeChange}
                 className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
               />
@@ -51,7 +51,7 @@ export const EditAboutMe = ({ aboutMeData, setAboutMeData , setIsAboutMeEditOpen
               <input
                 type="tel"
                 name="phone"
-                value={aboutMeData.phone}
+                value={aboutMeData.phone || ''}
                 onChange={handleAboutMeChange}
                 className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
               />

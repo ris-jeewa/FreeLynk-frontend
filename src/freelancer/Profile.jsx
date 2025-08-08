@@ -207,9 +207,9 @@ export const FreelanceProfile = () => {
 
           // Update about me data
           setAboutMeData({
-            description: response.freelancerProfile?.bio || 'Description',
-            email: response.email || 'Email',
-            phone: response.phoneNumber || 'Tele'
+            description: response.freelancerProfile?.bio,
+            email: response.email,
+            phone: response.phoneNumber 
           });
 
           // Update skills data
