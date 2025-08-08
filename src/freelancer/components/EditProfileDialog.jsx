@@ -54,7 +54,7 @@ export const EditProfileDialog = ({ profileData, setProfileData, isOpen, onClose
                 <input
                   type="text"
                   name="name"
-                  value={formData.name}
+                  value={profileData.name}
                   onChange={handleInputChange}
                   className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
                   placeholder="Enter your full name"
@@ -69,10 +69,10 @@ export const EditProfileDialog = ({ profileData, setProfileData, isOpen, onClose
                 <input
                   type="text"
                   name="title"
-                  value={formData.title}
+                  value={profileData.title}
                   onChange={handleInputChange}
                   className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
-                  placeholder="e.g., Full Stack Developer"
+                  placeholder="e.g: Full Stack Developer"
                 />
               </div>
             </div>
@@ -85,10 +85,10 @@ export const EditProfileDialog = ({ profileData, setProfileData, isOpen, onClose
               <input
                 type="text"
                 name="location"
-                value={formData.location}
+                value={profileData.location}
                 onChange={handleInputChange}
                 className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
-                placeholder="e.g., New York, USA"
+                placeholder="e.g: New York, USA"
               />
             </div>
           </div>
@@ -108,10 +108,10 @@ export const EditProfileDialog = ({ profileData, setProfileData, isOpen, onClose
                 <input
                   type="url"
                   name="github"
-                  value={formData.github}
+                  value={profileData?.github}
                   onChange={handleInputChange}
                   className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
-                  placeholder="https://github.com/yourusername"
+                  placeholder="e.g: https://github.com/yourusername"
                 />
               </div>
               
@@ -123,10 +123,10 @@ export const EditProfileDialog = ({ profileData, setProfileData, isOpen, onClose
                 <input
                   type="url"
                   name="linkedin"
-                  value={formData.linkedin}
+                  value={profileData?.linkedin}
                   onChange={handleInputChange}
                   className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
-                  placeholder="https://linkedin.com/in/yourprofile"
+                  placeholder="e.g: https://linkedin.com/in/yourprofile"
                 />
               </div>
               
@@ -138,51 +138,16 @@ export const EditProfileDialog = ({ profileData, setProfileData, isOpen, onClose
                 <input
                   type="url"
                   name="portfolio"
-                  value={formData.portfolio}
+                  value={profileData?.portfolio}
                   onChange={handleInputChange}
                   className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
-                  placeholder="https://yourportfolio.com"
+                  placeholder="e.g: https://yourportfolio.com"
                 />
               </div>
             </div>
           </div>
 
-          {/* Rating Information */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white border-b border-gray-700 pb-2">
-              Rating Information
-            </h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-gray-400 mb-2">Rating</label>
-                <input
-                  type="number"
-                  name="rating"
-                  value={formData.rating}
-                  onChange={handleInputChange}
-                  step="0.1"
-                  min="0"
-                  max="5"
-                  className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
-                  placeholder="4.9"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-gray-400 mb-2">Number of Reviews</label>
-                <input
-                  type="number"
-                  name="reviews"
-                  value={formData.reviews}
-                  onChange={handleInputChange}
-                  min="0"
-                  className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
-                  placeholder="124"
-                />
-              </div>
-            </div>
-          </div>
+          
 
           {/* Action Buttons */}
           <div className="flex justify-end gap-4 pt-6 border-t border-gray-700">
