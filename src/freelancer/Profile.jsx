@@ -26,20 +26,20 @@ export const FreelanceProfile = () => {
   const [profileImage, setProfileImage] = useState(getBestImage(user?.picture, 'PROFILE'));
   const fileInputRef = useRef(null);
   const [profileData, setProfileData] = useState({
-    name: user?.name || 'Sarah Johnson',
-    title: 'Full Stack Developer',
-    location: 'New York, USA',
-    rating: '4.9',
-    reviews: '124',
-    github: 'https://github.com',
-    linkedin: 'https://linkedin.com',
-    portfolio: 'https://portfolio.com'
+    name: user?.name,
+    title: '',
+    location: '',
+    rating: 0,
+    reviews: 0,
+    github: '',
+    linkedin: '',
+    portfolio: ''
   });
 
   const [aboutMeData, setAboutMeData] = useState({
-    description: 'Full Stack Developer with 5+ years of experience in building scalable web applications. Passionate about creating elegant solutions to complex problems. Specialized in React, Node.js, and cloud technologies.',
-    email: `${user?.nickname}@gmail.com` || 'sarah.johnson@example.com',
-    phone: '+1 234 567 8900'
+    description: 'Description',
+    email: '',
+    phone: 'Tele'
   });
 
   const [skillsData, setSkillsData] = useState({
@@ -195,23 +195,22 @@ export const FreelanceProfile = () => {
           // Update profile data with fetched user data
           setProfileData(prevData => ({
             ...prevData,
-            name: response.name || prevData.name,
-            title: response.freelancerProfile?.title || prevData.title,
-            location: response.freelancerProfile?.location || prevData.location,
-            rating: response.freelancerProfile?.rating?.toString() || prevData.rating,
-            reviews: response.freelancerProfile?.numberOfReviews?.toString() || prevData.reviews,
-            github: response.freelancerProfile?.githubUrl || prevData.github,
-            linkedin: response.freelancerProfile?.linkedinUrl || prevData.linkedin,
-            portfolio: response.freelancerProfile?.portfolioUrl || prevData.portfolio
+            name: response.name,
+            title: response.freelancerProfile?.title,
+            location: response.freelancerProfile?.location,
+            rating: response.freelancerProfile?.rating?.toString(),
+            reviews: response.freelancerProfile?.numberOfReviews?.toString(),
+            github: response.freelancerProfile?.githubUrl,
+            linkedin: response.freelancerProfile?.linkedinUrl,
+            portfolio: response.freelancerProfile?.portfolioUrl
           }));
 
           // Update about me data
-          setAboutMeData(prevData => ({
-            ...prevData,
-            description: response.freelancerProfile?.bio || prevData.description,
-            email: response.email || prevData.email,
-            phone: response.phoneNumber || prevData.phone
-          }));
+          setAboutMeData({
+            description: response.freelancerProfile?.bio || 'Description',
+            email: response.email || 'Email',
+            phone: response.phoneNumber || 'Tele'
+          });
 
           // Update skills data
           if (response.freelancerProfile?.skills) {
