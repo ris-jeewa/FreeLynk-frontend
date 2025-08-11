@@ -2,6 +2,7 @@ import React from 'react';
 import { FaEdit } from 'react-icons/fa';
 
 const AboutMeTab = ({ aboutMeData, handleAboutMeEdit }) => {
+
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
@@ -13,8 +14,8 @@ const AboutMeTab = ({ aboutMeData, handleAboutMeEdit }) => {
           <FaEdit size={20} className='hover:text-orange-500'/>
         </button>
       </div>
-      <p className="text-gray-400 leading-relaxed p-2 rounded-lg bg-gray-900 border-1 border-gray-500">
-        {aboutMeData.description}
+      <p className={`leading-relaxed p-2 rounded-lg bg-gray-900 border-1 border-gray-500 ${aboutMeData.bio == ''|| null ? 'text-gray-400' : 'text-white'}`}>
+        {aboutMeData.bio == ''|| null ? 'No bio' : aboutMeData.bio}
       </p>
 
       <div>
@@ -22,11 +23,11 @@ const AboutMeTab = ({ aboutMeData, handleAboutMeEdit }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-gray-400 mb-2">Email</label>
-            <p className="text-gray-400 p-2 rounded-lg bg-gray-900 border-1 border-gray-500">{aboutMeData.email}</p>
+            <p className={`p-2 rounded-lg bg-gray-900 border-1 border-gray-500 ${aboutMeData.email == null ? 'text-gray-400' : 'text-white'}`}>{aboutMeData.email == null ? 'No email' : aboutMeData.email}</p>
           </div>
           <div>
             <label className="block text-gray-400 mb-2">Phone</label>
-            <p className="text-gray-400 p-2 rounded-lg bg-gray-900 border-1 border-gray-500">{aboutMeData.phone}</p>
+            <p className={`p-2 rounded-lg bg-gray-900 border-1 border-gray-500 ${aboutMeData.phone == null ? 'text-gray-400' : 'text-white'}`}>{aboutMeData.phone == null ? 'No phone number' : aboutMeData.phone}</p>
           </div>
         </div>
       </div>

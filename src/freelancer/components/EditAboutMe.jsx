@@ -1,11 +1,27 @@
 import React from "react";
 import { FaTimes } from "react-icons/fa";
+import { updateAboutMe } from "../../services/userProfileService";
+import toast from "react-hot-toast";
 
 export const EditAboutMe = ({ aboutMeData, setAboutMeData , setIsAboutMeEditOpen }) => {
 
-    const handleAboutMeSave = (e) => {
+    const handleAboutMeSave = async (e) => {
         e.preventDefault();
         setIsAboutMeEditOpen(false);
+
+        try {
+            const response = await updateAboutMe(aboutMeData.id, {
+                bio: aboutMeData.bio,
+                email: aboutMeData.email,
+                phoneNumber: aboutMeData.phone
+            });
+
+            console.log(response,"respone of update about me");
+        } catch (error) {
+            console.error("Error updating about me:", error);
+            toast.error("Failed to update about me");
+        }
+
       };
     
       const handleAboutMeChange = (e) => {
@@ -27,10 +43,10 @@ export const EditAboutMe = ({ aboutMeData, setAboutMeData , setIsAboutMeEditOpen
         </div>
         <form onSubmit={handleAboutMeSave} className="space-y-6">
           <div>
-            <label className="block text-gray-400 mb-2">Description</label>
+            <label className="block text-gray-400 mb-2">Bio</label>
             <textarea
-              name="description"
-              value={aboutMeData.description}
+              name="bio"
+              value={aboutMeData.bio || ''}
               onChange={handleAboutMeChange}
               className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500 h-32"
             />
@@ -41,7 +57,7 @@ export const EditAboutMe = ({ aboutMeData, setAboutMeData , setIsAboutMeEditOpen
               <input
                 type="email"
                 name="email"
-                value={aboutMeData.email}
+                value={aboutMeData.email || ''}
                 onChange={handleAboutMeChange}
                 className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
               />
@@ -51,7 +67,7 @@ export const EditAboutMe = ({ aboutMeData, setAboutMeData , setIsAboutMeEditOpen
               <input
                 type="tel"
                 name="phone"
-                value={aboutMeData.phone}
+                value={aboutMeData.phone || ''}
                 onChange={handleAboutMeChange}
                 className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
               />

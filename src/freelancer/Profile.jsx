@@ -13,31 +13,34 @@ import { EditAboutMe } from './components/EditAboutMe';
 import { EditSkills } from './components/EditSkills';
 import { EditProfileDialog } from './components/EditProfileDialog';
 import { getProfileData } from '../services/userProfileService';
+import { getBestImage, handleImageError } from '../utils/imageUtils';
+import { shouldRedirectToLogin, clearAuthData } from '../utils/authUtils';
 
 export const FreelanceProfile = () => {
-  const { user, isAuthenticated, getAccessTokenSilently, logout } = useAuth0();
+  const { user, isAuthenticated, isLoading, getAccessTokenSilently, logout } = useAuth0();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('personal');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isAboutMeEditOpen, setIsAboutMeEditOpen] = useState(false);
   const [isSkillsEditOpen, setIsSkillsEditOpen] = useState(false);
-  const [profileImage, setProfileImage] = useState(user?.picture || "https://via.placeholder.com/150");
+  const [profileImage, setProfileImage] = useState(getBestImage(user?.picture, 'PROFILE'));
   const fileInputRef = useRef(null);
   const [profileData, setProfileData] = useState({
-    name: user?.name || 'Sarah Johnson',
-    title: 'Full Stack Developer',
-    location: 'New York, USA',
-    rating: '4.9',
-    reviews: '124',
-    github: 'https://github.com',
-    linkedin: 'https://linkedin.com',
-    portfolio: 'https://portfolio.com'
+    id: 0,
+    name: user?.name,
+    title: '',
+    location: '',
+    rating: 0,
+    reviews: 0,
+    github: '',
+    linkedin: '',
+    portfolio: ''
   });
 
   const [aboutMeData, setAboutMeData] = useState({
-    description: 'Full Stack Developer with 5+ years of experience in building scalable web applications. Passionate about creating elegant solutions to complex problems. Specialized in React, Node.js, and cloud technologies.',
-    email: `${user?.nickname}@gmail.com` || 'sarah.johnson@example.com',
-    phone: '+1 234 567 8900'
+    bio: 'Bio',
+    email: 'Email',
+    phone: 'Tele'
   });
 
   const [skillsData, setSkillsData] = useState({
@@ -146,11 +149,20 @@ export const FreelanceProfile = () => {
   };
 
   const handleLogout = () => {
-    logout({
-      logoutParams: {
-        returnTo: window.location.origin + '/login'
-      }
-    });
+    // Clear custom authentication data
+    clearAuthData();
+    
+    // Logout from Auth0 if authenticated
+    if (isAuthenticated) {
+      logout({
+        logoutParams: {
+          returnTo: window.location.origin + '/login'
+        }
+      });
+    } else {
+      // If only custom auth, redirect to login
+      navigate('/login');
+    }
   };
 
   useEffect(() => {
@@ -178,16 +190,49 @@ export const FreelanceProfile = () => {
     const fetchProfileData = async () => {
       try {
         const response = await getProfileData();
-        console.log(response.data.profilePictureUrl,"user data tika me enwa");
+        console.log('Fetched user data:', response);
         
-        if (response.data.profilePictureUrl) {
-          setProfileImage(response.data.profilePictureUrl);
-          // Extract public ID from the Cloudinary URL
-          const urlParts = response.data.profilePictureUrl.split('/');
-          const publicId = urlParts[urlParts.length - 1].split('?')[0];
-          setPublicId(publicId);
+        if (response) {
+          // Update profile data with fetched user data
+          setProfileData(prevData => ({
+            ...prevData,
+            id: response.id,
+            name: response.name,
+            title: response.freelancerProfile?.title,
+            location: response.freelancerProfile?.location,
+            rating: response.freelancerProfile?.rating?.toString(),
+            reviews: response.freelancerProfile?.numberOfReviews?.toString(),
+            github: response.freelancerProfile?.githubUrl,
+            linkedin: response.freelancerProfile?.linkedinUrl,
+            portfolio: response.freelancerProfile?.portfolioUrl,
+          }));
+
+          // Update about me data
+          setAboutMeData({
+            id: response.id,
+            bio: response.bio,
+            email: response.email,
+            phone: response.phoneNumber 
+          });
+
+          // Update skills data
+          if (response.freelancerProfile?.skills) {
+            setSkillsData(prevData => ({
+              ...prevData,
+              skills: response.freelancerProfile.skills
+            }));
+          }
+          
+          if (response.profilePictureUrl) {
+            setProfileImage(response.profilePictureUrl);
+            // Extract public ID from the Cloudinary URL
+            const urlParts = response.profilePictureUrl.split('/');
+            const publicId = urlParts[urlParts.length - 1].split('?')[0];
+            setPublicId(publicId);
+          }
+          
+          setUserData(response);
         }
-        setUserData(response.data);
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
@@ -195,12 +240,40 @@ export const FreelanceProfile = () => {
     fetchProfileData();
   }, []);
 
-  // Redirect to login if not authenticated
+  // Check authentication status
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (shouldRedirectToLogin(isAuthenticated, isLoading)) {
+      console.log('No authentication found, redirecting to login');
       navigate('/login');
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, isLoading, navigate]);
+
+  // Show loading while Auth0 is initializing
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
+          <p className="mt-4 text-gray-400">Loading profile...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Check if user is authenticated (either via Auth0 or custom auth)
+  const isUserAuthenticated = isAuthenticated || localStorage.getItem('authToken');
+  
+  // Show loading if not authenticated
+  if (!isUserAuthenticated && !isLoading) {
+    return (
+      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
+          <p className="mt-4 text-gray-400">Redirecting to login...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#1A1A1A] py-12">
@@ -223,6 +296,7 @@ export const FreelanceProfile = () => {
                     src={profileImage}
                     alt="Profile"
                     className="w-32 h-32 rounded-full border-4 border-orange-500 object-cover"
+                    onError={(e) => handleImageError(e, 'PROFILE')}
                   />
                 )}
                 <div className="mt-4">
@@ -277,6 +351,7 @@ export const FreelanceProfile = () => {
           setProfileData={setProfileData}
           isOpen={isEditModalOpen}
           onClose={handleCloseEditProfile}
+          userId={profileData.id}
         />
 
         {/* Tabs */}
