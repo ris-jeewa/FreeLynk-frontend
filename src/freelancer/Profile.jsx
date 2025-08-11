@@ -26,6 +26,7 @@ export const FreelanceProfile = () => {
   const [profileImage, setProfileImage] = useState(getBestImage(user?.picture, 'PROFILE'));
   const fileInputRef = useRef(null);
   const [profileData, setProfileData] = useState({
+    id: 0,
     name: user?.name,
     title: '',
     location: '',
@@ -37,8 +38,8 @@ export const FreelanceProfile = () => {
   });
 
   const [aboutMeData, setAboutMeData] = useState({
-    description: 'Description',
-    email: '',
+    bio: 'Bio',
+    email: 'Email',
     phone: 'Tele'
   });
 
@@ -195,6 +196,7 @@ export const FreelanceProfile = () => {
           // Update profile data with fetched user data
           setProfileData(prevData => ({
             ...prevData,
+            id: response.id,
             name: response.name,
             title: response.freelancerProfile?.title,
             location: response.freelancerProfile?.location,
@@ -202,12 +204,13 @@ export const FreelanceProfile = () => {
             reviews: response.freelancerProfile?.numberOfReviews?.toString(),
             github: response.freelancerProfile?.githubUrl,
             linkedin: response.freelancerProfile?.linkedinUrl,
-            portfolio: response.freelancerProfile?.portfolioUrl
+            portfolio: response.freelancerProfile?.portfolioUrl,
           }));
 
           // Update about me data
           setAboutMeData({
-            description: response.freelancerProfile?.bio,
+            id: response.id,
+            bio: response.bio,
             email: response.email,
             phone: response.phoneNumber 
           });
@@ -348,6 +351,7 @@ export const FreelanceProfile = () => {
           setProfileData={setProfileData}
           isOpen={isEditModalOpen}
           onClose={handleCloseEditProfile}
+          userId={profileData.id}
         />
 
         {/* Tabs */}

@@ -2,6 +2,7 @@ import React from 'react';
 import { FaEdit } from 'react-icons/fa';
 
 const AboutMeTab = ({ aboutMeData, handleAboutMeEdit }) => {
+
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
@@ -13,8 +14,8 @@ const AboutMeTab = ({ aboutMeData, handleAboutMeEdit }) => {
           <FaEdit size={20} className='hover:text-orange-500'/>
         </button>
       </div>
-      <p className={`leading-relaxed p-2 rounded-lg bg-gray-900 border-1 border-gray-500 ${aboutMeData.description == null ? 'text-gray-400' : 'text-white'}`}>
-        {aboutMeData.description == null ? 'No description' : aboutMeData.description}
+      <p className={`leading-relaxed p-2 rounded-lg bg-gray-900 border-1 border-gray-500 ${aboutMeData.bio == ''|| null ? 'text-gray-400' : 'text-white'}`}>
+        {aboutMeData.bio == ''|| null ? 'No bio' : aboutMeData.bio}
       </p>
 
       <div>
