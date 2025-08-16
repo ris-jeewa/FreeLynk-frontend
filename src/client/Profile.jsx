@@ -119,6 +119,7 @@ export const ClientProfile = () => {
           onClose={handleCloseEditProfile}
           profileData={profileData}
           onSave={handleSaveProfile}
+          userId={1}
         />
       </div>
   );
