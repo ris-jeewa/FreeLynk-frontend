@@ -1,5 +1,4 @@
 import React from 'react';
-import { handleImageError } from '../../utils/imageUtils';
 
 const PortfolioTab = () => {
   return (
@@ -9,10 +8,9 @@ const PortfolioTab = () => {
         {/* Portfolio Item */}
         <div className="bg-[#1A1A1A] rounded-lg overflow-hidden">
           <img
-            src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop"
+            src="https://via.placeholder.com/400x300"
             alt="Project"
             className="w-full h-48 object-cover"
-            onError={(e) => handleImageError(e, 'PROJECT')}
           />
           <div className="p-4">
             <h3 className="text-xl font-semibold text-white mb-2">E-commerce Platform</h3>

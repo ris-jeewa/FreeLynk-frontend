@@ -1,8 +1,18 @@
 import React, { useState } from "react";
 import { FaTimes, FaGithub, FaLinkedin, FaGlobe, FaUser, FaMapMarkerAlt, FaBriefcase } from "react-icons/fa";
 
-export const EditProfileDialog = ({ profileData, setProfileData, isOpen, onClose }) => {
+export const EditProfileDialog = ({ profileData, setProfileData, isOpen, onClose, userId}) => {
   const [formData, setFormData] = useState(profileData);
+  const [loading, setLoading] = useState(false);
+
+  console.log(userId,"userId",profileData.github,"profile data");
+  
+  // Update formData when profileData changes
+  React.useEffect(() => {
+    if (profileData) {
+      setFormData(profileData);
+    }
+  }, [profileData]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -12,10 +22,30 @@ export const EditProfileDialog = ({ profileData, setProfileData, isOpen, onClose
     }));
   };
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
-    setProfileData(formData);
-    onClose();
+    try {
+      setLoading(true);
+      
+      // Update local state with the new data
+      const updatedProfileData = {
+        ...profileData,
+        name: formData.name,
+        title: formData.title,
+        location: formData.location,
+        github: formData.github,
+        linkedin: formData.linkedin,
+        portfolio: formData.portfolio
+      };
+      
+      setProfileData(updatedProfileData);
+      onClose();
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      alert('Failed to update profile. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCancel = () => {
@@ -54,7 +84,7 @@ export const EditProfileDialog = ({ profileData, setProfileData, isOpen, onClose
                 <input
                   type="text"
                   name="name"
-                  value={profileData.name}
+                  value={formData.name || ""}
                   onChange={handleInputChange}
                   className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
                   placeholder="Enter your full name"
@@ -69,7 +99,7 @@ export const EditProfileDialog = ({ profileData, setProfileData, isOpen, onClose
                 <input
                   type="text"
                   name="title"
-                  value={profileData.title}
+                  value={formData.title || ""}
                   onChange={handleInputChange}
                   className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
                   placeholder="e.g: Full Stack Developer"
@@ -85,7 +115,7 @@ export const EditProfileDialog = ({ profileData, setProfileData, isOpen, onClose
               <input
                 type="text"
                 name="location"
-                value={profileData.location}
+                value={formData.location || ""}
                 onChange={handleInputChange}
                 className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
                 placeholder="e.g: New York, USA"
@@ -108,7 +138,7 @@ export const EditProfileDialog = ({ profileData, setProfileData, isOpen, onClose
                 <input
                   type="url"
                   name="github"
-                  value={profileData?.github}
+                  value={formData.github || ""}
                   onChange={handleInputChange}
                   className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
                   placeholder="e.g: https://github.com/yourusername"
@@ -123,7 +153,7 @@ export const EditProfileDialog = ({ profileData, setProfileData, isOpen, onClose
                 <input
                   type="url"
                   name="linkedin"
-                  value={profileData?.linkedin}
+                  value={formData.linkedin || ""}
                   onChange={handleInputChange}
                   className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
                   placeholder="e.g: https://linkedin.com/in/yourprofile"
@@ -138,7 +168,7 @@ export const EditProfileDialog = ({ profileData, setProfileData, isOpen, onClose
                 <input
                   type="url"
                   name="portfolio"
-                  value={profileData?.portfolio}
+                  value={formData.portfolio || ""}
                   onChange={handleInputChange}
                   className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
                   placeholder="e.g: https://yourportfolio.com"
@@ -160,9 +190,10 @@ export const EditProfileDialog = ({ profileData, setProfileData, isOpen, onClose
             </button>
             <button
               type="submit"
-              className="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors"
+              disabled={loading}
+              className="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Save Changes
+              {loading ? 'Saving...' : 'Save Changes'}
             </button>
           </div>
         </form>
