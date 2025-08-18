@@ -4,60 +4,67 @@ import React, { useState } from 'react';
 
 const TestCheckBox = () => {
 
-  const listOptions = [ "apple", "banana", "cherry", "date", "elderberry", "fig", "honeydew melon"];
+  const listOptions = ["apple", "banana", "cherry", "date", "elderberry", "fig", "honeydew melon"];
 
   const [selected, setSelected] = useState([]);
 
-  const handleSelect = (value,name) => {
-    if(value){
+  const handleSelect = (value, name) => {
+    if (value) {
       setSelected([...selected, name]);
-    }else{
+    } else {
       setSelected(selected.filter(item => item !== name));
     }
   }
 
   const selectAll = (value) => {
-    if(value){
+    if (value) {
       setSelected(listOptions);
-    }else{
+    } else {
       setSelected([]);
     }
   }
 
-  
 
 
-    return(
+
+  return (
     <div className="flex w-full min-h-screen items-center justify-center p-5">
       <div className="w-full max-w-md">
         <h1 className="font-semibold text-lg mb-2">Checkbox List</h1>
         <div className="-mx-5 px-5 py-0 rounded bg-gray-100 font-medium">
-          <Checkbox name="all" value={selected.length === listOptions.length} updateValue={selectAll} />
+          <div className="my-5">
+            <input type="checkbox" id="all" name="all" onChange={(e) => selectAll(e.target.checked)} checked={selected.length === listOptions.length} />
+            <label htmlFor="all" className="ml-1 capitalize">Select All</label>
+          </div>
         </div>
-        { listOptions.map((item) => {
-          return <Checkbox name={item} updateValue={handleSelect} value={selected.includes(item)}>{item}</Checkbox>
-        }) }
+
+        {listOptions.map((item) => (
+          <div key={item} className="my-5">
+            <input type="checkbox" id={item} name={item} onChange={() => handleSelect(!selected.includes(item), item)} checked={selected.includes(item)} />
+            <label htmlFor={item} className="ml-1 capitalize">{item}</label>
+          </div>
+        ))}
       </div>
-     </div>
-    )
+    </div>
+  )
 };
 
 export default TestCheckBox;
 
 
-function Checkbox({name,children ,value =false , updateValue = ()=>{} }){
+// function Checkbox({name,children ,value =false , updateValue = ()=>{} }){
 
-  const handleChange = ()=>{
-      console.log("name",name);
-      console.log("value",value);
-      updateValue(!value,name);
-  }
+//   const handleChange = ()=>{
+//       console.log("name",name);
+//       console.log("value",value);
+//       updateValue(!value,name);
+//   }
 
 
-  return(
-    <div className="my-5">
-      <input type="checkbox" id={`${name}-check`} name={name} onChange={handleChange} checked={value}/>
-      <label for={`${name}-check`} className="ml-1 capitalize">{children}</label>
-    </div>
-  )
-}
+//   return(
+//     <div className="my-5">
+//       <input type="checkbox" id={`${name}-check`} name={name} onChange={handleChange} checked={value}/>
+//       <label for={`${name}-check`} className="ml-1 capitalize">{children}</label>
+//     </div>
+//   )
+// }
