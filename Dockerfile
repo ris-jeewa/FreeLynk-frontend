@@ -18,13 +18,12 @@ RUN npm run build
 FROM nginx:alpine
 
 # Copy build output to Nginx html folder
-COPY --from=builder /app/build /usr/share/nginx/html
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Copy a custom nginx config (optional)
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 5173
-EXPOSE 5173
+# Expose port 80 (default Nginx port)
+EXPOSE 80
 
-# Run nginx
+# Run nginx in foreground
 CMD ["nginx", "-g", "daemon off;"]
