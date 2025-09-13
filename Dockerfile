@@ -4,14 +4,16 @@ FROM node:18-alpine AS builder
 # Set working directory
 WORKDIR /app
 
-# Install dependencies
+# Copy package.json and package-lock.json files to working directory
 COPY package.json package-lock.json ./
+
+# Install dependencies
 RUN npm install --frozen-lockfile
 
-# Copy source code
+# Copy the entire project to working directory
 COPY . .
 
-# Build the app (production build)
+# Build the app for production
 RUN npm run build
 
 # Stage 2: Serve app with Nginx
