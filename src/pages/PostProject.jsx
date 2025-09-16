@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Form, Input, Select, Button, Card, Typography, Row, Col, message, Upload } from "antd";
-import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import { UploadOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { projectService } from "../services/projectService";
 
@@ -75,12 +75,12 @@ export const PostProject = () => {
     <div className="min-h-screen py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="text-center mb-8">
-          <Title level={2} className="mb-2">
+          <h1 level={2} className="mb-2 text-white text-2xl font-bold">
             Post a Project / Job
-          </Title>
-          <Text className="text-gray-400 text-lg">
+          </h1>
+          <div className="text-lg">
             Find the perfect freelancer for your project
-          </Text>
+          </div>
         </div>
 
         <Card className="bg-[#2A2A2A] border-gray-700">
@@ -95,7 +95,7 @@ export const PostProject = () => {
               {/* Project Title */}
               <Col span={24}>
                 <Form.Item
-                  label={<span className="font-medium">Project Title *</span>}
+                  label={<span className="font-medium">Project Title</span>}
                   name="title"
                   rules={[
                     { required: true, message: "Please enter a project title" },
@@ -119,7 +119,6 @@ export const PostProject = () => {
                 >
                   <Select
                     placeholder="Select category"
-                    className="bg-[#3A3A3A]"
                     size="large"
                   >
                     {projectCategories.map(category => (
@@ -133,13 +132,12 @@ export const PostProject = () => {
 
               <Col xs={24} md={12}>
                 <Form.Item
-                  label={<span className=" font-medium">Project Type p</span>}
+                  label={<span className=" font-medium">Project Type</span>}
                   name="type"
                   rules={[{ required: true, message: "Please select project type" }]}
                 >
                   <Select
                     placeholder="Select type"
-                    className="bg-[#3A3A3A]"
                     size="large"
                   >
                     {projectTypes.map(type => (
@@ -154,7 +152,7 @@ export const PostProject = () => {
               {/* Budget */}
               <Col xs={24} md={12}>
                 <Form.Item
-                  label={<span className=" font-medium">Budget (USD) p</span>}
+                  label={<span className=" font-medium">Budget (USD)</span>}
                   name="budget"
                   rules={[
                     { required: true, message: "Please enter budget" },
@@ -164,7 +162,6 @@ export const PostProject = () => {
                   <Input
                     type="number"
                     placeholder="e.g., 1000"
-                    className="bg-[#3A3A3A] border-gray-600 "
                     size="large"
                     prefix="$"
                   />
@@ -173,13 +170,12 @@ export const PostProject = () => {
 
               <Col xs={24} md={12}>
                 <Form.Item
-                  label={<span className=" font-medium">Experience Lepel *</span>}
+                  label={<span className=" font-medium">Experience Level</span>}
                   name="experienceLevel"
                   rules={[{ required: true, message: "Please select experience level" }]}
                 >
                   <Select
                     placeholder="Select level"
-                    className="bg-[#3A3A3A]"
                     size="large"
                   >
                     {experienceLevels.map(level => (
@@ -194,13 +190,12 @@ export const PostProject = () => {
               {/* Timeline */}
               <Col xs={24} md={12}>
                 <Form.Item
-                  label={<span className=" font-medium">Timeline *</span>}
+                  label={<span className=" font-medium">Timeline</span>}
                   name="timeline"
                   rules={[{ required: true, message: "Please select timeline" }]}
                 >
                   <Select
                     placeholder="Select timeline"
-                    className="bg-[#3A3A3A]"
                     size="large"
                   >
                     <Option value="1week">1 week</Option>
@@ -216,14 +211,13 @@ export const PostProject = () => {
 
               <Col xs={24} md={12}>
                 <Form.Item
-                  label={<span className=" font-medium">Skills Requirpd *</span>}
+                  label={<span className=" font-medium">Skills Requirpd</span>}
                   name="skills"
                   rules={[{ required: true, message: "Please enter required skills" }]}
                 >
                   <Select
                     mode="tags"
                     placeholder="e.g., React, Node.js, MongoDB"
-                    className="bg-[#3A3A3A]"
                     size="large"
                   />
                 </Form.Item>
@@ -232,7 +226,7 @@ export const PostProject = () => {
               {/* Project Description */}
               <Col span={24}>
                 <Form.Item
-                  label={<span className=" font-medium">Project Descrpption *</span>}
+                  label={<span className=" font-medium">Project Descrpption</span>}
                   name="description"
                   rules={[
                     { required: true, message: "Please enter project description" },
