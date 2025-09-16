@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Form, Input, Select, Button, Card, Typography, Row, Col, message, Upload } from "antd";
-import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import { UploadOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { projectService } from "../services/projectService";
 
@@ -75,12 +75,12 @@ export const PostProject = () => {
     <div className="min-h-screen py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="text-center mb-8">
-          <Title level={2} className="mb-2">
+          <h1 level={2} className="mb-2 text-white text-2xl font-bold">
             Post a Project / Job
-          </Title>
-          <Text className="text-gray-400 text-lg">
+          </h1>
+          <div className="text-lg">
             Find the perfect freelancer for your project
-          </Text>
+          </div>
         </div>
 
         <Card className="bg-[#2A2A2A] border-gray-700">
@@ -95,7 +95,7 @@ export const PostProject = () => {
               {/* Project Title */}
               <Col span={24}>
                 <Form.Item
-                  label={<span className="font-medium">Project Title *</span>}
+                  label={<span className="font-medium">Project Title</span>}
                   name="title"
                   rules={[
                     { required: true, message: "Please enter a project title" },
@@ -119,7 +119,6 @@ export const PostProject = () => {
                 >
                   <Select
                     placeholder="Select category"
-                    className="bg-[#3A3A3A]"
                     size="large"
                   >
                     {projectCategories.map(category => (
@@ -139,7 +138,6 @@ export const PostProject = () => {
                 >
                   <Select
                     placeholder="Select type"
-                    className="bg-[#3A3A3A]"
                     size="large"
                   >
                     {projectTypes.map(type => (
@@ -164,7 +162,6 @@ export const PostProject = () => {
                   <Input
                     type="number"
                     placeholder="e.g., 1000"
-                    className="bg-[#3A3A3A] border-gray-600 "
                     size="large"
                     prefix="$"
                   />
@@ -179,7 +176,6 @@ export const PostProject = () => {
                 >
                   <Select
                     placeholder="Select level"
-                    className="bg-[#3A3A3A]"
                     size="large"
                   >
                     {experienceLevels.map(level => (
@@ -200,7 +196,6 @@ export const PostProject = () => {
                 >
                   <Select
                     placeholder="Select timeline"
-                    className="bg-[#3A3A3A]"
                     size="large"
                   >
                     <Option value="1week">1 week</Option>
@@ -223,7 +218,6 @@ export const PostProject = () => {
                   <Select
                     mode="tags"
                     placeholder="e.g., React, Node.js, MongoDB"
-                    className="bg-[#3A3A3A]"
                     size="large"
                   />
                 </Form.Item>
