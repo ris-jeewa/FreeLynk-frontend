@@ -132,7 +132,7 @@ export const PostProject = () => {
 
               <Col xs={24} md={12}>
                 <Form.Item
-                  label={<span className=" font-medium">Project Type p</span>}
+                  label={<span className=" font-medium">Project Type</span>}
                   name="type"
                   rules={[{ required: true, message: "Please select project type" }]}
                 >
@@ -152,7 +152,7 @@ export const PostProject = () => {
               {/* Budget */}
               <Col xs={24} md={12}>
                 <Form.Item
-                  label={<span className=" font-medium">Budget (USD) p</span>}
+                  label={<span className=" font-medium">Budget (USD)</span>}
                   name="budget"
                   rules={[
                     { required: true, message: "Please enter budget" },
@@ -170,7 +170,7 @@ export const PostProject = () => {
 
               <Col xs={24} md={12}>
                 <Form.Item
-                  label={<span className=" font-medium">Experience Lepel *</span>}
+                  label={<span className=" font-medium">Experience Level</span>}
                   name="experienceLevel"
                   rules={[{ required: true, message: "Please select experience level" }]}
                 >
@@ -190,7 +190,7 @@ export const PostProject = () => {
               {/* Timeline */}
               <Col xs={24} md={12}>
                 <Form.Item
-                  label={<span className=" font-medium">Timeline *</span>}
+                  label={<span className=" font-medium">Timeline</span>}
                   name="timeline"
                   rules={[{ required: true, message: "Please select timeline" }]}
                 >
@@ -211,7 +211,7 @@ export const PostProject = () => {
 
               <Col xs={24} md={12}>
                 <Form.Item
-                  label={<span className=" font-medium">Skills Requirpd *</span>}
+                  label={<span className=" font-medium">Skills Requirpd</span>}
                   name="skills"
                   rules={[{ required: true, message: "Please enter required skills" }]}
                 >
@@ -226,7 +226,7 @@ export const PostProject = () => {
               {/* Project Description */}
               <Col span={24}>
                 <Form.Item
-                  label={<span className=" font-medium">Project Descrpption *</span>}
+                  label={<span className=" font-medium">Project Descrpption</span>}
                   name="description"
                   rules={[
                     { required: true, message: "Please enter project description" },
