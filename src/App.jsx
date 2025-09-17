@@ -10,6 +10,7 @@ import Membership from "./pages/Membership";
 import Careers from "./pages/Careers";
 import TestCheckBox from "./pages/TestCheckBox";
 import { ClientProfile } from "./client/Profile";
+import { PostProject } from "./pages/PostProject";
 
 const App = () => {
   return (
@@ -32,6 +33,11 @@ const App = () => {
       <Route path="/client-profile/:id" element={
         <Layout>
           <ClientProfile />
+        </Layout>
+      } />
+      <Route path="/post-project" element={
+        <Layout>
+          <PostProject />
         </Layout>
       } />
       <Route path="/about" element={
