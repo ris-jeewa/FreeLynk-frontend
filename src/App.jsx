@@ -24,7 +24,29 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         
-        
+        {/* Public pages with Layout */}
+        <Route path="/" element={
+          <Layout>
+            <Home />
+          </Layout>
+        } />
+        <Route path="/about" element={
+          <Layout>
+            <AboutUs />
+          </Layout>
+        } />
+        <Route path="/membership" element={
+          <Layout>
+            <Membership />
+          </Layout>
+        } />
+        <Route path="/careers" element={
+          <Layout>
+            <Careers />
+          </Layout>
+        } />
+
+
       </Routes>
     </AuthProvider>
   );
