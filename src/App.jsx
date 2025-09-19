@@ -11,57 +11,22 @@ import Careers from "./pages/Careers";
 import TestCheckBox from "./pages/TestCheckBox";
 import { ClientProfile } from "./client/Profile";
 import { PostProject } from "./pages/PostProject";
+import AdminDashboard from "./pages/AdminDashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { AuthProvider } from "./contexts/AuthContext";
+import AuthDemo from "./components/AuthDemo";
 
 const App = () => {
   return (
-    <Routes>
-      {/* Auth pages without Layout */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      
-      {/* Other pages with Layout */}
-      <Route path="/" element={
-        <Layout>
-          <Home />
-        </Layout>
-      } />
-      <Route path="/freelance-profile/:id" element={
-        <Layout>
-          <FreelanceProfile />
-        </Layout>
-      } />
-      <Route path="/client-profile/:id" element={
-        <Layout>
-          <ClientProfile />
-        </Layout>
-      } />
-      <Route path="/post-project" element={
-        <Layout>
-          <PostProject />
-        </Layout>
-      } />
-      <Route path="/about" element={
-        <Layout>
-          <AboutUs />
-        </Layout>
-      } />
-      <Route path="/membership" element={
-        <Layout>
-          <Membership />
-        </Layout>
-      } />
-      <Route path="/careers" element={
-        <Layout>
-          <Careers />
-        </Layout>
-      } />
-
-      <Route path="/checkbox" element={
-        <Layout>
-          <TestCheckBox />
-        </Layout>
-      } />
-    </Routes>
+    <AuthProvider>
+      <Routes>
+        {/* Auth pages without Layout */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        
+        
+      </Routes>
+    </AuthProvider>
   );
 };
 
