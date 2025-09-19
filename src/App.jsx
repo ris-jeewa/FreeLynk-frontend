@@ -46,7 +46,55 @@ const App = () => {
           </Layout>
         } />
 
+        {/* Protected Routes - Role-based access */}
+        <Route path="/freelance-profile/:id" element={
+          <ProtectedRoute requiredRole="FREELANCER">
+            <Layout>
+              <FreelanceProfile />
+            </Layout>
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/client-profile/:id" element={
+          <ProtectedRoute requiredRole="CLIENT">
+            <Layout>
+              <ClientProfile />
+            </Layout>
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/post-project" element={
+          <ProtectedRoute requiredRoles={["CLIENT", "ADMIN"]}>
+            <Layout>
+              <PostProject />
+            </Layout>
+          </ProtectedRoute>
+        } />
+        
+        {/* Admin Routes */}
+        <Route path="/admin/*" element={
+          <ProtectedRoute requiredRole="ADMIN">
+            <Routes>
+              <Route path="dashboard" element={<AdminDashboard />} />
+              <Route path="*" element={<AdminDashboard />} />
+            </Routes>
+          </ProtectedRoute>
+        } />
 
+        {/* Test routes */}
+        <Route path="/checkbox" element={
+          <Layout>
+            <TestCheckBox />
+          </Layout>
+        } />
+        
+        <Route path="/auth-demo" element={
+          <ProtectedRoute>
+            <Layout>
+              <AuthDemo />
+            </Layout>
+          </ProtectedRoute>
+        } />
       </Routes>
     </AuthProvider>
   );
