@@ -11,14 +11,13 @@ import Careers from "./pages/Careers";
 import TestCheckBox from "./pages/TestCheckBox";
 import { ClientProfile } from "./client/Profile";
 import { PostProject } from "./pages/PostProject";
-import AdminDashboard from "./pages/AdminDashboard";
-import ProtectedRoute from "./components/ProtectedRoute";
-import { AuthProvider } from "./contexts/AuthContext";
-import AuthDemo from "./components/AuthDemo";
+// import AdminDashboard from "./pages/AdminDashboard";
+// import ProtectedRoute from "./components/ProtectedRoute";
+// import { AuthProvider } from "./contexts/AuthContext";
+// import AuthDemo from "./components/AuthDemo";
 
 const App = () => {
   return (
-    <AuthProvider>
       <Routes>
         {/* Auth pages without Layout */}
         <Route path="/login" element={<Login />} />
@@ -48,38 +47,30 @@ const App = () => {
 
         {/* Protected Routes - Role-based access */}
         <Route path="/freelance-profile/:id" element={
-          <ProtectedRoute requiredRole="FREELANCER">
             <Layout>
               <FreelanceProfile />
             </Layout>
-          </ProtectedRoute>
         } />
         
         <Route path="/client-profile/:id" element={
-          <ProtectedRoute requiredRole="CLIENT">
             <Layout>
               <ClientProfile />
             </Layout>
-          </ProtectedRoute>
         } />
         
         <Route path="/post-project" element={
-          <ProtectedRoute requiredRoles={["CLIENT", "ADMIN"]}>
             <Layout>
               <PostProject />
             </Layout>
-          </ProtectedRoute>
         } />
         
         {/* Admin Routes */}
-        <Route path="/admin/*" element={
-          <ProtectedRoute requiredRole="ADMIN">
+        {/* <Route path="/admin/*" element={
             <Routes>
               <Route path="dashboard" element={<AdminDashboard />} />
               <Route path="*" element={<AdminDashboard />} />
             </Routes>
-          </ProtectedRoute>
-        } />
+        } /> */}
 
         {/* Test routes */}
         <Route path="/checkbox" element={
@@ -89,14 +80,11 @@ const App = () => {
         } />
         
         <Route path="/auth-demo" element={
-          <ProtectedRoute>
             <Layout>
-              <AuthDemo />
+              {/* <AuthDemo /> */}
             </Layout>
-          </ProtectedRoute>
         } />
       </Routes>
-    </AuthProvider>
   );
 };
 
