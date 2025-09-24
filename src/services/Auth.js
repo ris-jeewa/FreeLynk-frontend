@@ -247,79 +247,79 @@ export function getAccessToken() {
 /**
  * React component demonstrating the usage
  */
-export default function Auth() {
-  const [authState, setAuthState] = useState({
-    loggedIn: isLoggedIn(),
-    user: null,
-  });
+// export default function Auth() {
+//   const [authState, setAuthState] = useState({
+//     loggedIn: isLoggedIn(),
+//     user: null,
+//   });
 
-  useEffect(() => {
-    // If callback contains code, handle it
-    const url = new URL(window.location.href);
-    if (url.searchParams.get("code") && url.searchParams.get("state")) {
-      handleCallback()
-        .then((tokens) => {
-          // optionally parse id_token to get user info
-          const idToken = localStorage.getItem(STORAGE.ID_TOKEN);
-          const payload = idToken ? parseJwt(idToken) : null;
-          setAuthState({ loggedIn: true, user: payload });
-        })
-        .catch((err) => {
-          console.error("Callback handling failed:", err);
-          setAuthState({ loggedIn: false, user: null });
-        });
-    } else {
-      if (isLoggedIn()) {
-        const idToken = localStorage.getItem(STORAGE.ID_TOKEN);
-        const payload = idToken ? parseJwt(idToken) : null;
-        setAuthState({ loggedIn: true, user: payload });
-      } else {
-        setAuthState({ loggedIn: false, user: null });
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+//   useEffect(() => {
+//     // If callback contains code, handle it
+//     const url = new URL(window.location.href);
+//     if (url.searchParams.get("code") && url.searchParams.get("state")) {
+//       handleCallback()
+//         .then((tokens) => {
+//           // optionally parse id_token to get user info
+//           const idToken = localStorage.getItem(STORAGE.ID_TOKEN);
+//           const payload = idToken ? parseJwt(idToken) : null;
+//           setAuthState({ loggedIn: true, user: payload });
+//         })
+//         .catch((err) => {
+//           console.error("Callback handling failed:", err);
+//           setAuthState({ loggedIn: false, user: null });
+//         });
+//     } else {
+//       if (isLoggedIn()) {
+//         const idToken = localStorage.getItem(STORAGE.ID_TOKEN);
+//         const payload = idToken ? parseJwt(idToken) : null;
+//         setAuthState({ loggedIn: true, user: payload });
+//       } else {
+//         setAuthState({ loggedIn: false, user: null });
+//       }
+//     }
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, []);
 
-  return (
-    <div style={{ padding: 20, fontFamily: "Arial, sans-serif" }}>
-      <h2>WSO2 IS 6.1.0 — Manual OAuth2 (Auth Code + PKCE)</h2>
-      <div>
-        <strong>Server:</strong> {WSO2_HOST}
-      </div>
-      <div>
-        <strong>Client ID:</strong> {CLIENT_ID}
-      </div>
-      <div style={{ marginTop: 12 }}>
-        {authState.loggedIn ? (
-          <>
-            <div>
-              <strong>Logged in</strong>
-            </div>
-            {authState.user && (
-              <pre style={{ maxWidth: 600, background: "#f2f2f2", padding: 8 }}>
-                {JSON.stringify(authState.user, null, 2)}
-              </pre>
-            )}
-            <button onClick={() => { logout(); }} style={{ marginTop: 8 }}>
-              Logout
-            </button>
-          </>
-        ) : (
-          <>
-            <div>
-              <strong>Not logged in</strong>
-            </div>
-            <button
-              onClick={() => {
-                login();
-              }}
-              style={{ marginTop: 8 }}
-            >
-              Login
-            </button>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
+//   return (
+//     <div style={{ padding: 20, fontFamily: "Arial, sans-serif" }}>
+//       <h2>WSO2 IS 6.1.0 — Manual OAuth2 (Auth Code + PKCE)</h2>
+//       <div>
+//         <strong>Server:</strong> {WSO2_HOST}
+//       </div>
+//       <div>
+//         <strong>Client ID:</strong> {CLIENT_ID}
+//       </div>
+//       <div style={{ marginTop: 12 }}>
+//         {authState.loggedIn ? (
+//           <>
+//             <div>
+//               <strong>Logged in</strong>
+//             </div>
+//             {authState.user && (
+//               <pre style={{ maxWidth: 600, background: "#f2f2f2", padding: 8 }}>
+//                 {JSON.stringify(authState.user, null, 2)}
+//               </pre>
+//             )}
+//             <button onClick={() => { logout(); }} style={{ marginTop: 8 }}>
+//               Logout
+//             </button>
+//           </>
+//         ) : (
+//           <>
+//             <div>
+//               <strong>Not logged in</strong>
+//             </div>
+//             <button
+//               onClick={() => {
+//                 login();
+//               }}
+//               style={{ marginTop: 8 }}
+//             >
+//               Login
+//             </button>
+//           </>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
