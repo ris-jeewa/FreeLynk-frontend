@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Form, Input, Select, Button, Card, Typography, Row, Col, message, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { projectService } from "../services/projectService";
 
 const { Title, Text } = Typography;
 const { TextArea } = Input;
