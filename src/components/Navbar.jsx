@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
 import { isLoggedIn } from "../services/Auth";
+import { login } from "../services/Auth";
 
 export const Navbar = () => {
 
@@ -38,17 +39,24 @@ export const Navbar = () => {
             <Link to="/about" className="text-white hover:text-orange-500 transition-colors">About Us</Link>
             <Link to="/membership" className="text-white hover:text-orange-500 transition-colors">Membership</Link>
             <Link to="/careers" className="text-white hover:text-orange-500 transition-colors">Careers</Link>
-            
+
             {authState.loggedIn ? (
               <>
-              {authState.user && (  
-                              <pre style={{ maxWidth: 600, background: "#f2f2f2", padding: 8 }}>
-                                {JSON.stringify(authState.user, null, 2)}
-                              </pre>
-              )}
+                {authState.user && (
+                  <pre style={{ maxWidth: 600, background: "#f2f2f2", padding: 8 }}>
+                    {JSON.stringify(authState.user, null, 2)}
+                  </pre>
+                )}
               </>
             ) : (
-              <Link to="/login" className="text-white hover:text-orange-500 transition-colors">Login</Link>
+              <button
+                onClick={() => {
+                  login();
+                }}
+                style={{ marginTop: 8, color: 'white', hover: 'text-orange-500' }}
+              >
+                Login
+              </button>
             )}
 
           </div>
