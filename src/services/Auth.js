@@ -17,7 +17,7 @@ const LOGOUT_ENDPOINT = `${WSO2_HOST.replace(/\/$/, "")}/oidc/logout`;
 /**
  * Storage keys
  */
-const STORAGE = {
+export const STORAGE = {
   CODE_VERIFIER: "pkce_code_verifier",
   OAUTH_STATE: "oauth_state",
   ACCESS_TOKEN: "access_token",
