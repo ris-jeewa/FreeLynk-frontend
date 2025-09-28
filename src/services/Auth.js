@@ -9,7 +9,7 @@ import React, { useEffect, useState } from "react";
  */
 const CLIENT_ID = "VaksZKyRRN2JqGhTIENqlyfqwNga";
 const WSO2_HOST = "https://localhost:9443"; // include protocol and :9443
-const REDIRECT_URI = "http://localhost:5173/"; // make sure this matches the SP redirect URI exactly
+const REDIRECT_URI = "http://localhost:5173"; // make sure this matches the SP redirect URI exactly
 const AUTHORIZATION_ENDPOINT = `${WSO2_HOST.replace(/\/$/, "")}/oauth2/authorize`;
 const TOKEN_ENDPOINT = `${WSO2_HOST.replace(/\/$/, "")}/oauth2/token`;
 const LOGOUT_ENDPOINT = `${WSO2_HOST.replace(/\/$/, "")}/oidc/logout`;
@@ -17,7 +17,7 @@ const LOGOUT_ENDPOINT = `${WSO2_HOST.replace(/\/$/, "")}/oidc/logout`;
 /**
  * Storage keys
  */
-const STORAGE = {
+export const STORAGE = {
   CODE_VERIFIER: "pkce_code_verifier",
   OAUTH_STATE: "oauth_state",
   ACCESS_TOKEN: "access_token",
@@ -68,7 +68,7 @@ function toFormUrlEncoded(obj) {
 /**
  * Small JWT decode (only to read payload; no signature verification client-side)
  */
-function parseJwt(token) {
+export function parseJwt(token) {
   if (!token) return null;
   const parts = token.split(".");
   if (parts.length < 2) return null;
@@ -115,6 +115,8 @@ export async function login({ scope = "openid profile email" } = {}) {
   };
 
   const url = AUTHORIZATION_ENDPOINT + "?" + new URLSearchParams(params).toString();
+
+  console.log(url, "url");
   // redirect browser to WSO2 IS authorization endpoint
   window.location.href = url;
 }

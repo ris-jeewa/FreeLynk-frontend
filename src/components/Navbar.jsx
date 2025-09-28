@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
 import { isLoggedIn } from "../services/Auth";
+import { login,handleCallback,STORAGE, parseJwt } from "../services/Auth";
 
 export const Navbar = () => {
 
@@ -10,21 +11,33 @@ export const Navbar = () => {
     user: null,
   });
 
-  const handleLogout = () => {
-    logout();
-  };
+  useEffect(() => {
+    // If callback contains code, handle it
+    const url = new URL(window.location.href);
+    if (url.searchParams.get("code") && url.searchParams.get("state")) {
+      handleCallback()
+        .then((tokens) => {
+          // optionally parse id_token to get user info
+          const idToken = localStorage.getItem(STORAGE.ID_TOKEN);
+          const payload = idToken ? parseJwt(idToken) : null;
+          setAuthState({ loggedIn: true, user: payload });
+        })
+        .catch((err) => {
+          console.error("Callback handling failed:", err);
+          setAuthState({ loggedIn: false, user: null });
+        });
+    } else {
+      if (isLoggedIn()) {
+        const idToken = localStorage.getItem(STORAGE.ID_TOKEN);
+        const payload = idToken ? parseJwt(idToken) : null;
+        setAuthState({ loggedIn: true, user: payload });
+      } else {
+        setAuthState({ loggedIn: false, user: null });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const getProfileLink = () => {
-    if (isFreelancer()) return "/freelance-profile/1";
-    if (isClient()) return "/client-profile/1";
-    if (isAdmin()) return "/admin/dashboard";
-    return "/";
-  };
-
-  const getProfileText = () => {
-    if (isAdmin()) return "Admin Panel";
-    return "Profile";
-  };
 
   return (
     <header className="fixed w-full z-10 bg-[#1A1A1A] border-b border-gray-800">
@@ -38,19 +51,36 @@ export const Navbar = () => {
             <Link to="/about" className="text-white hover:text-orange-500 transition-colors">About Us</Link>
             <Link to="/membership" className="text-white hover:text-orange-500 transition-colors">Membership</Link>
             <Link to="/careers" className="text-white hover:text-orange-500 transition-colors">Careers</Link>
-            
+
             {authState.loggedIn ? (
               <>
-              {authState.user && (  
-                              <pre style={{ maxWidth: 600, background: "#f2f2f2", padding: 8 }}>
-                                {JSON.stringify(authState.user, null, 2)}
-                              </pre>
-              )}
+                <div>
+                  <strong>Logged in</strong>
+                </div>
+                {/* {authState.user && (
+                  <pre style={{ maxWidth: 600, background: "#f2f2f2", padding: 8 }}>
+                    {JSON.stringify(authState.user, null, 2)}
+                  </pre>
+                )} */}
+                <button onClick={() => { logout(); }} style={{ marginTop: 8 }}>
+                  Logout
+                </button>
               </>
             ) : (
-              <Link to="/login" className="text-white hover:text-orange-500 transition-colors">Login</Link>
+              <>
+                <div>
+                  <strong>Not logged in</strong>
+                </div>
+                <button
+                  onClick={() => {
+                    login();
+                  }}
+                  style={{ marginTop: 8 }}
+                >
+                  Login
+                </button>
+              </>
             )}
-
           </div>
         </nav>
       </div >
