@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
-import { isLoggedIn } from "../services/Auth";
-import { login,handleCallback,STORAGE, parseJwt } from "../services/Auth";
+import { login,handleCallback,STORAGE, parseJwt,isLoggedIn, logout } from "../services/Auth";
 
 export const Navbar = () => {
 
