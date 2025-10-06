@@ -11,11 +11,11 @@ import {
   FaEdit,
   FaTrash
 } from 'react-icons/fa';
-import { useAuth } from '../contexts/AuthContext';
+// import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const AdminDashboard = () => {
-  const { user, logout } = useAuth();
+  // const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
 
@@ -48,7 +48,7 @@ const AdminDashboard = () => {
   };
 
   const handleUserAction = (userId, action) => {
-    console.log(`${action} user ${userId}`);
+    // console.log(`${action} user ${userId}`);
     // Implement user management actions
   };
 
@@ -250,7 +250,7 @@ const AdminDashboard = () => {
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
-            <p className="text-gray-400">Welcome back, {user?.name}</p>
+            <p className="text-gray-400">Welcome back, </p>
           </div>
           <button 
             onClick={handleLogout}
@@ -271,7 +271,7 @@ const AdminDashboard = () => {
                 : 'text-gray-400 hover:text-white'
             }`}
           >
-            <FaChartBar className="inline-block mr-2" />
+            <FaChartBar className="inline-block mr-2 text-white-500" />
             Overview
           </button>
           <button

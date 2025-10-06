@@ -11,7 +11,7 @@ import Careers from "./pages/Careers";
 import TestCheckBox from "./pages/TestCheckBox";
 import { ClientProfile } from "./client/Profile";
 import { PostProject } from "./pages/PostProject";
-// import AdminDashboard from "./pages/AdminDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 // import ProtectedRoute from "./components/ProtectedRoute";
 // import { AuthProvider } from "./contexts/AuthContext";
 // import AuthDemo from "./components/AuthDemo";
@@ -65,12 +65,12 @@ const App = () => {
         } />
         
         {/* Admin Routes */}
-        {/* <Route path="/admin/*" element={
+        <Route path="/admin/*" element={
             <Routes>
               <Route path="dashboard" element={<AdminDashboard />} />
               <Route path="*" element={<AdminDashboard />} />
             </Routes>
-        } /> */}
+        } />
 
         {/* Test routes */}
         <Route path="/checkbox" element={
