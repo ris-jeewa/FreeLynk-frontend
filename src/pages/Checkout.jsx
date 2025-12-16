@@ -1,55 +1,58 @@
-import {loadStripe} from "@stripe/stripe-js";
-import {Elements, CardElement, useStripe, useElements} from "@stripe/react-stripe-js";
-import axios from "axios";
+import { useEffect, useState } from "react";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import CheckoutForm from "../components/CheckoutForm";
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
-const CheckoutForm = () => {
-  const stripe = useStripe();
-  const elements = useElements();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // 1. Create PaymentIntent from backend
-    const response = await axios.post("http://localhost:8080/api/payment/create-payment-intent", {
-      amount: 1000, // $10
-      currency: "usd"
-    });
-
-    const clientSecret = response.data.clientSecret;
-
-    // 2. Confirm card payment
-    const result = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: elements.getElement(CardElement)
-      }
-    });
-
-    if (result.error) {
-      alert(result.error.message);
-    } else {
-      if (result.paymentIntent.status === "succeeded") {
-        alert("Payment Successful!");
-      }
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="border p-4">
-      <CardElement />
-      <button className="mt-4 px-4 py-2 bg-black text-white" disabled={!stripe}>
-        Pay
-      </button>
-    </form>
-  );
-};
+const stripePublicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
+const stripePromise = loadStripe(stripePublicKey);
 
 export default function Checkout() {
+  const [clientSecret, setClientSecret] = useState("");
+
+  useEffect(() => {
+    fetch("http://localhost:8080/api/payments/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount: 1, currency: "usd" })
+    })
+      .then(async (res) => {
+        // Check if response is OK
+        if (!res.ok) {
+          const errorText = await res.text();
+          throw new Error(`HTTP error! status: ${res.status}, message: ${errorText}`);
+        }
+        
+        // Check if response has content
+        const contentType = res.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          throw new Error("Response is not JSON");
+        }
+        
+        // Parse JSON
+        const data = await res.json();
+        return data;
+      })
+      .then(data => {
+        if (data.clientSecret) {
+          setClientSecret(data.clientSecret);
+        } else {
+          setError("No clientSecret in response");
+        }
+      })
+      .catch(err => {
+        console.error("Error creating payment intent:", err);
+        setError(err.message || "Failed to create payment intent");
+      });
+  }, []);
+
+  const appearance = { theme: "stripe" };
+
   return (
-    <Elements stripe={stripePromise}>
-      <CheckoutForm />
-    </Elements>
+    clientSecret && (
+      <Elements stripe={stripePromise} options={{ clientSecret, appearance }}>
+        <CheckoutForm clientSecret={clientSecret} />
+      </Elements>
+    )
   );
 }
-    
