@@ -14,7 +14,7 @@ import { EditSkills } from './components/EditSkills';
 import { EditProfileDialog } from './components/EditProfileDialog';
 import { getProfileData } from '../services/userProfileService';
 import { getBestImage, handleImageError } from '../utils/imageUtils';
-import { shouldRedirectToLogin, clearAuthData } from '../utils/authUtils';
+// import { shouldRedirectToLogin, clearAuthData } from '../utils/authUtils';
 
 export const FreelanceProfile = () => {
   const { user, isAuthenticated, isLoading, getAccessTokenSilently, logout } = useAuth0();
@@ -150,7 +150,7 @@ export const FreelanceProfile = () => {
 
   const handleLogout = () => {
     // Clear custom authentication data
-    clearAuthData();
+    // clearAuthData();
     
     // Logout from Auth0 if authenticated
     if (isAuthenticated) {
@@ -241,12 +241,12 @@ export const FreelanceProfile = () => {
   }, []);
 
   // Check authentication status
-  useEffect(() => {
-    if (shouldRedirectToLogin(isAuthenticated, isLoading)) {
-      console.log('No authentication found, redirecting to login');
-      navigate('/login');
-    }
-  }, [isAuthenticated, isLoading, navigate]);
+  // useEffect(() => {
+  //   if (shouldRedirectToLogin(isAuthenticated, isLoading)) {
+  //     console.log('No authentication found, redirecting to login');
+  //     navigate('/login');
+  //   }
+  // }, [isAuthenticated, isLoading, navigate]);
 
   // Show loading while Auth0 is initializing
   if (isLoading) {
