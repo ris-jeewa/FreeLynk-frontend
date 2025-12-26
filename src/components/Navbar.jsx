@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
-import { login,handleCallback,STORAGE, parseJwt,isLoggedIn, logout } from "../services/Auth";
+import { login,handleCallback,isLoggedIn, logout } from "../services/authis";
 
 export const Navbar = () => {
 
@@ -53,28 +53,22 @@ export const Navbar = () => {
 
             {authState.loggedIn ? (
               <>
-                <div>
-                  <strong>Logged in</strong>
-                </div>
                 {/* {authState.user && (
                   <pre style={{ maxWidth: 600, background: "#f2f2f2", padding: 8 }}>
                     {JSON.stringify(authState.user, null, 2)}
                   </pre>
                 )} */}
-                <button onClick={() => { logout(); }} style={{ marginTop: 8 }}>
+                <button onClick={() => { logout(); }} style={{ marginTop: 8, backgroundColor: 'orange', color: 'white', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer' }}>
                   Logout
                 </button>
               </>
             ) : (
               <>
-                <div>
-                  <strong>Not logged in</strong>
-                </div>
                 <button
                   onClick={() => {
                     login();
                   }}
-                  style={{ marginTop: 8 }}
+                  style={{ marginTop: 8, backgroundColor: 'orange', color: 'white', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer' }}
                 >
                   Login
                 </button>
