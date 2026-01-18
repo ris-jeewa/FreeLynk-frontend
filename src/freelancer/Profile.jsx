@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Cloudinary } from '@cloudinary/url-gen';
 import { AdvancedImage, responsive, placeholder } from '@cloudinary/react';
 import CloudinaryUploadWidget from '../components/CloudinaryUploadWidget';
-import AboutMeTab from './components/AboutMeTab';
+import { AboutMeTab } from './components/AboutMeTab';
 import SkillsTab from './components/SkillsTab';
 import PortfolioTab from './components/PortfolioTab';
 import { EditAboutMe } from './components/EditAboutMe';
