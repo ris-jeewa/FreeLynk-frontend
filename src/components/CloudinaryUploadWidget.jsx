@@ -89,14 +89,6 @@ const CloudinaryUploadWidget = ({ uwConfig, setPublicId, setImageUrl }) => {
   }, [uwConfig, setPublicId, setImageUrl]);
 
   return (
-    // <button
-    //   ref={uploadButtonRef}
-    //   id="upload_widget"
-    //   className="cloudinary-button"
-    // >
-    //   Upload
-    // </button>
-
     <button
       ref={uploadButtonRef}
       className="absolute bottom-0 right-0 bg-orange-500 p-2 rounded-full hover:bg-orange-600 transition-colors"
