@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { FaUser, FaCode, FaBriefcase, FaStar, FaEdit, FaGithub, FaLinkedin, FaGlobe, FaTimes, FaSignOutAlt } from 'react-icons/fa';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { Cloudinary } from '@cloudinary/url-gen';
 import { AdvancedImage, responsive, placeholder } from '@cloudinary/react';
 import CloudinaryUploadWidget from '../components/CloudinaryUploadWidget';
@@ -12,7 +11,7 @@ import PortfolioTab from './components/PortfolioTab';
 import { EditAboutMe } from './components/EditAboutMe';
 import { EditSkills } from './components/EditSkills';
 import { EditProfileDialog } from './components/EditProfileDialog';
-import { getProfileData } from '../services/userProfileService';
+import { getProfileData, updateUserImage } from '../services/userProfileService';
 import { getBestImage, handleImageError } from '../utils/imageUtils';
 // import { shouldRedirectToLogin, clearAuthData } from '../utils/authUtils';
 
@@ -24,7 +23,6 @@ export const FreelanceProfile = () => {
   const [isAboutMeEditOpen, setIsAboutMeEditOpen] = useState(false);
   const [isSkillsEditOpen, setIsSkillsEditOpen] = useState(false);
   const [profileImage, setProfileImage] = useState(getBestImage(user?.picture, 'PROFILE'));
-  const fileInputRef = useRef(null);
   const [profileData, setProfileData] = useState({
     id: 0,
     name: user?.name,
@@ -37,38 +35,19 @@ export const FreelanceProfile = () => {
     portfolio: ''
   });
 
-  const [aboutMeData, setAboutMeData] = useState({
-    bio: 'Bio',
-    email: 'Email',
-    phone: 'Tele'
-  });
+  const [aboutMeData, setAboutMeData] = useState("");
 
-  const [skillsData, setSkillsData] = useState({
-    skills: 'React, Node.js, TypeScript, Python, AWS, Docker, MongoDB, GraphQL',
-    experiences: [
-      {
-        position: 'Senior Developer',
-        company: 'Tech Solutions Inc.',
-        period: '2020 - Present',
-        description: 'Led development of multiple web applications, mentored junior developers, and implemented CI/CD pipelines.'
-      },
-      {
-        position: 'Full Stack Developer',
-        company: 'Digital Innovations',
-        period: '2018 - 2020',
-        description: 'Developed and maintained multiple client projects using React and Node.js.'
-      }
-    ]
-  });
+  const [skillsData, setSkillsData] = useState("");
 
   const [userData, setUserData] = useState('');
 
   // Configuration
-  const cloudName = 'dcn64hytu'; // Replace with your actual cloud name
-  const uploadPreset = 'freelynk'; // Replace with your actual upload preset
+  const cloudName = 'dcn64hytu'; 
+  const uploadPreset = 'freelynk';
 
   // State
   const [publicId, setPublicId] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
 
   // Cloudinary configuration
   const cld = new Cloudinary({
@@ -116,30 +95,6 @@ export const FreelanceProfile = () => {
     setIsEditModalOpen(false);
   };
 
-  const handleImageClick = () => {
-    fileInputRef.current.click();
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      axios.put(`http://localhost:8080/api/users/1/image`,{
-        imageUrl: file.name
-      })
-        .then(response => {
-          console.log("Image updated successfully", response.data);
-        })
-        .catch(error => {
-          console.error("Error updating image", error);
-        });
-      reader.onloadend = () => {
-        setProfileImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const handleAboutMeEdit = () => {
     setIsAboutMeEditOpen(true);
   };
@@ -149,42 +104,49 @@ export const FreelanceProfile = () => {
   };
 
   const handleLogout = () => {
-    // Clear custom authentication data
-    // clearAuthData();
     
-    // Logout from Auth0 if authenticated
-    if (isAuthenticated) {
-      logout({
-        logoutParams: {
-          returnTo: window.location.origin + '/login'
-        }
-      });
-    } else {
-      // If only custom auth, redirect to login
-      navigate('/login');
-    }
   };
 
+  // Save image URL to database when it's uploaded
   useEffect(() => {
-    if (publicId) {
-      const imageUrl = cld.image(publicId).toURL();
-      setProfileImage(imageUrl);
-      // Update profile picture URL in backend
-
-      console.log(imageUrl,"image url/////////////////////////////////////");
-      axios.put(`http://localhost:8080/api/users/1/image`,imageUrl,{
-        headers: {
-          'Content-Type': 'application/json'
+    const saveImageToDatabase = async () => {
+      if (imageUrl && profileData.id) {
+        try {
+          await updateUserImage(profileData.id, imageUrl);
+          console.log("Profile image updated successfully");
+        } catch (error) {
+          console.error("Error updating profile image", error);
         }
-      })
-      .then(response => {
-        console.log("Profile image updated successfully", response.data);
-      })
-      .catch(error => {
-        console.error("Error updating profile image", error);
-      });
+      }
+    };
+
+    saveImageToDatabase();
+  }, [imageUrl, profileData.id]);
+
+  // Update publicId and profileImage when imageUrl changes (for display)
+  useEffect(() => {
+    if (imageUrl && !publicId) {
+      // Extract publicId from Cloudinary URL for display purposes
+      try {
+        const urlParts = imageUrl.split('/');
+        const fileName = urlParts[urlParts.length - 1];
+        const publicIdFromUrl = fileName.split('.')[0];
+        
+        // If it's in a folder, include folder path
+        const folderIndex = urlParts.findIndex(part => part === 'upload');
+        if (folderIndex >= 0 && folderIndex < urlParts.length - 1) {
+          const folderPath = urlParts.slice(folderIndex + 1, -1).join('/');
+          const extractedPublicId = folderPath ? `${folderPath}/${publicIdFromUrl}` : publicIdFromUrl;
+          setPublicId(extractedPublicId);
+        } else {
+          setPublicId(publicIdFromUrl);
+        }
+        setProfileImage(imageUrl);
+      } catch (error) {
+        console.error("Error extracting publicId from URL:", error);
+      }
     }
-  }, [publicId]);
+  }, [imageUrl, publicId]);
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -225,10 +187,25 @@ export const FreelanceProfile = () => {
           
           if (response.profilePictureUrl) {
             setProfileImage(response.profilePictureUrl);
+            setImageUrl(response.profilePictureUrl);
             // Extract public ID from the Cloudinary URL
-            const urlParts = response.profilePictureUrl.split('/');
-            const publicId = urlParts[urlParts.length - 1].split('?')[0];
-            setPublicId(publicId);
+            try {
+              const urlParts = response.profilePictureUrl.split('/');
+              const fileName = urlParts[urlParts.length - 1].split('?')[0];
+              const publicIdFromUrl = fileName.split('.')[0];
+              
+              // If it's in a folder, include folder path
+              const folderIndex = urlParts.findIndex(part => part === 'upload');
+              if (folderIndex >= 0 && folderIndex < urlParts.length - 1) {
+                const folderPath = urlParts.slice(folderIndex + 1, -1).join('/');
+                const extractedPublicId = folderPath ? `${folderPath}/${publicIdFromUrl}` : publicIdFromUrl;
+                setPublicId(extractedPublicId);
+              } else {
+                setPublicId(publicIdFromUrl);
+              }
+            } catch (error) {
+              console.error("Error extracting publicId from saved URL:", error);
+            }
           }
           
           setUserData(response);
@@ -249,16 +226,16 @@ export const FreelanceProfile = () => {
   // }, [isAuthenticated, isLoading, navigate]);
 
   // Show loading while Auth0 is initializing
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
-          <p className="mt-4 text-gray-400">Loading profile...</p>
-        </div>
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
+  //       <div className="text-center">
+  //         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
+  //         <p className="mt-4 text-gray-400">Loading profile...</p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   // Check if user is authenticated (either via Auth0 or custom auth)
   const isUserAuthenticated = isAuthenticated || localStorage.getItem('authToken');
@@ -299,9 +276,11 @@ export const FreelanceProfile = () => {
                     onError={(e) => handleImageError(e, 'PROFILE')}
                   />
                 )}
-                <div className="mt-4">
-                  <CloudinaryUploadWidget uwConfig={uwConfig} setPublicId={setPublicId} />
-                </div>
+                <CloudinaryUploadWidget 
+                  uwConfig={uwConfig} 
+                  setPublicId={setPublicId}
+                  setImageUrl={setImageUrl}
+                />
               </div>
               <div>
                 <h1 className="text-3xl font-bold text-white">{profileData.name}</h1>
