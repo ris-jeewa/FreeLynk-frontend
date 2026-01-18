@@ -30,8 +30,7 @@ export const updateAboutMe = async (userId, aboutMeData) => {
 
 export const updateUserImage = async (userId, imageUrl) => {
     try {
-        const response = await api.put(`/api/users/${userId}/image`, { imageUrl });
-        console.log('Image updated:', response.data);
+        const response = await api.put(`/api/users/${userId}/image`,imageUrl );
         return response.data;
     } catch (error) {
         console.error('Error updating user image:', error);
