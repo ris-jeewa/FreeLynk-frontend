@@ -2,6 +2,30 @@ import React from 'react';
 import { FaEdit } from 'react-icons/fa';
 
 const SkillsTab = ({ skillsData, handleSkillsEdit }) => {
+  // Parse skills if it's a JSON string, otherwise use the array directly
+  const getSkillsArray = () => {
+    if (!skillsData?.skills) return [];
+    
+    // If skills is a string, try to parse it as JSON
+    if (typeof skillsData.skills === 'string') {
+      try {
+        return JSON.parse(skillsData.skills);
+      } catch (error) {
+        console.error('Error parsing skills JSON:', error);
+        return [];
+      }
+    }
+    
+    // If skills is already an array, return it
+    if (Array.isArray(skillsData.skills)) {
+      return skillsData.skills;
+    }
+    
+    return [];
+  };
+
+  const skillsArray = getSkillsArray();
+
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
@@ -14,17 +38,21 @@ const SkillsTab = ({ skillsData, handleSkillsEdit }) => {
         </button>
       </div>
       <div className="flex flex-wrap gap-3">
-        {skillsData.skills.split(',').map((skill) => (
-          <span
-            key={skill.trim()}
-            className="bg-[#1A1A1A] text-white px-4 py-2 rounded-full border border-gray-700"
-          >
-            {skill.trim()}
-          </span>
-        ))}
+        {skillsArray.length > 0 ? (
+          skillsArray.map((skill, index) => (
+            <span
+              key={`skill-${index}-${skill}`}
+              className="bg-[#1A1A1A] text-white px-4 py-2 rounded-full border border-gray-700"
+            >
+              {skill}
+            </span>
+          ))
+        ) : (
+          <p className="text-gray-400">No skills added yet. Click edit to add skills.</p>
+        )}
       </div>
 
-      <div>
+      {/* <div>
         <h2 className="text-2xl font-bold text-white mb-6">Work Experience</h2>
         <div className="space-y-6">
           {skillsData.experiences.map((exp, index) => (
@@ -36,7 +64,7 @@ const SkillsTab = ({ skillsData, handleSkillsEdit }) => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
