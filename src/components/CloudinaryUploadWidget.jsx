@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 
-const CloudinaryUploadWidget = ({ uwConfig, setPublicId }) => {
+const CloudinaryUploadWidget = ({ uwConfig, setPublicId, setImageUrl }) => {
   const uploadWidgetRef = useRef(null);
   const uploadButtonRef = useRef(null);
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
@@ -32,18 +32,30 @@ const CloudinaryUploadWidget = ({ uwConfig, setPublicId }) => {
 
     const initializeUploadWidget = () => {
       if (window.cloudinary && uploadButtonRef.current) {
-        // Create upload widget
         uploadWidgetRef.current = window.cloudinary.createUploadWidget(
           uwConfig,
           (error, result) => {
             if (!error && result && result.event === "success") {
               console.log("Upload successful:", result.info);
-              setPublicId(result.info.public_id);
+              
+              // Extract both publicId and full URL
+              const publicId = result.info.public_id;
+              const imageUrl = result.info.secure_url || result.info.url;
+              
+              if (setPublicId) {
+                setPublicId(publicId);
+              }
+              if (setImageUrl) {
+                setImageUrl(imageUrl);
+              }
+            }
+            
+            if (error) {
+              console.error("Upload error:", error);
             }
           }
         );
 
-        // Add click event to open widget
         const handleUploadClick = () => {
           if (uploadWidgetRef.current) {
             uploadWidgetRef.current.open();
@@ -53,7 +65,6 @@ const CloudinaryUploadWidget = ({ uwConfig, setPublicId }) => {
         const buttonElement = uploadButtonRef.current;
         buttonElement.addEventListener("click", handleUploadClick);
 
-        // Cleanup
         return () => {
           buttonElement.removeEventListener("click", handleUploadClick);
         };
@@ -71,11 +82,11 @@ const CloudinaryUploadWidget = ({ uwConfig, setPublicId }) => {
 
     return () => {
       const script = document.querySelector('script[src="https://upload-widget.cloudinary.com/global/all.js"]');
-      if (script) {
+      if (script && script.parentNode) {
         script.remove();
       }
     };
-  }, [uwConfig, setPublicId]);
+  }, [uwConfig, setPublicId, setImageUrl]);
 
   return (
     // <button
@@ -90,6 +101,8 @@ const CloudinaryUploadWidget = ({ uwConfig, setPublicId }) => {
       ref={uploadButtonRef}
       className="absolute bottom-0 right-0 bg-orange-500 p-2 rounded-full hover:bg-orange-600 transition-colors"
       disabled={!isScriptLoaded}
+      type="button"
+      aria-label="Upload profile image"
     >
       <FaEdit className="text-white" />
     </button>
