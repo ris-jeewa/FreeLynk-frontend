@@ -212,6 +212,9 @@ export const FreelanceProfile = () => {
         }
       } catch (error) {
         console.error("Error fetching profile data:", error);
+      } finally {
+        // Mark initial load as complete after fetching data
+        isInitialLoadRef.current = false;
       }
     };
     fetchProfileData();

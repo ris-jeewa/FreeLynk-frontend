@@ -11,31 +11,12 @@ export const Navbar = () => {
   });
 
   useEffect(() => {
-    // If callback contains code, handle it
-    const url = new URL(window.location.href);
-    if (url.searchParams.get("code") && url.searchParams.get("state")) {
-      handleCallback()
-        .then((tokens) => {
-          // optionally parse id_token to get user info
-          const idToken = localStorage.getItem(STORAGE.ID_TOKEN);
-          const payload = idToken ? parseJwt(idToken) : null;
-          setAuthState({ loggedIn: true, user: payload });
-        })
-        .catch((err) => {
-          console.error("Callback handling failed:", err);
-          setAuthState({ loggedIn: false, user: null });
-        });
-    } else {
-      if (isLoggedIn()) {
-        const idToken = localStorage.getItem(STORAGE.ID_TOKEN);
-        const payload = idToken ? parseJwt(idToken) : null;
-        setAuthState({ loggedIn: true, user: payload });
-      } else {
-        setAuthState({ loggedIn: false, user: null });
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  setAuthState({
+    loggedIn: isLoggedIn(),
+    user: null,
+  });
+}, []);
+
 
 
   return (
