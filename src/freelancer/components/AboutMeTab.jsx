@@ -1,38 +1,101 @@
 import React from 'react';
-import { FaEdit } from 'react-icons/fa';
+import { Typography, Button, Descriptions, Space, Card, Row, Col } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
 
-const AboutMeTab = ({ aboutMeData, handleAboutMeEdit }) => {
+const { Title, Paragraph, Text } = Typography;
 
+export const AboutMeTab = ({ aboutMeData, handleAboutMeEdit }) => {
   return (
-    <div className="space-y-8">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-white mb-2">About Me</h2>
-        <button
+    <Space direction="vertical" size="large" style={{ width: '100%' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Title level={2} style={{ color: '#fff', margin: 0 }}>
+          About Me
+        </Title>
+        <Button
+          type="default"
+          icon={<EditOutlined />}
           onClick={handleAboutMeEdit}
-          className='border-1 border-gray-500 rounded-full p-2'
-        >
-          <FaEdit size={20} className='hover:text-orange-500'/>
-        </button>
+          style={{ 
+            borderColor: '#666',
+            borderRadius: '50%',
+            width: '40px',
+            height: '40px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'transparent'
+          }}
+        />
       </div>
-      <p className={`leading-relaxed p-2 rounded-lg bg-gray-900 border-1 border-gray-500 ${aboutMeData.bio == ''|| null ? 'text-gray-400' : 'text-white'}`}>
-        {aboutMeData.bio == ''|| null ? 'No bio' : aboutMeData.bio}
-      </p>
+
+      <Card 
+        style={{ 
+          backgroundColor: '#1A1A1A',
+          borderColor: '#333',
+          borderRadius: '8px'
+        }}
+        bodyStyle={{ padding: '16px' }}
+      >
+        <Paragraph 
+          style={{ 
+            color: !aboutMeData?.bio || aboutMeData.bio === '' ? '#999' : '#fff',
+            margin: 0,
+            lineHeight: '1.75'
+          }}
+        >
+          {!aboutMeData?.bio || aboutMeData.bio === '' ? 'No bio' : aboutMeData.bio}
+        </Paragraph>
+      </Card>
 
       <div>
-        <h3 className="text-xl font-semibold text-white mb-4">Contact Information</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-gray-400 mb-2">Email</label>
-            <p className={`p-2 rounded-lg bg-gray-900 border-1 border-gray-500 ${aboutMeData.email == null ? 'text-gray-400' : 'text-white'}`}>{aboutMeData.email == null ? 'No email' : aboutMeData.email}</p>
-          </div>
-          <div>
-            <label className="block text-gray-400 mb-2">Phone</label>
-            <p className={`p-2 rounded-lg bg-gray-900 border-1 border-gray-500 ${aboutMeData.phone == null ? 'text-gray-400' : 'text-white'}`}>{aboutMeData.phone == null ? 'No phone number' : aboutMeData.phone}</p>
-          </div>
-        </div>
+        <Title level={4} style={{ color: '#fff', marginBottom: '16px' }}>
+          Contact Information
+        </Title>
+        <Row gutter={[24, 16]}>
+          <Col xs={24} md={12}>
+            <div>
+              <Text style={{ color: '#999', display: 'block', marginBottom: '8px' }}>
+                Email
+              </Text>
+              <Card 
+                style={{ 
+                  backgroundColor: '#1A1A1A',
+                  borderColor: '#333',
+                  borderRadius: '8px'
+                }}
+                bodyStyle={{ padding: '16px' }}
+              >
+                <Text style={{ 
+                  color: !aboutMeData?.email ? '#999' : '#fff'
+                }}>
+                  {!aboutMeData?.email ? 'No email' : aboutMeData.email}
+                </Text>
+              </Card>
+            </div>
+          </Col>
+          <Col xs={24} md={12}>
+            <div>
+              <Text style={{ color: '#999', display: 'block', marginBottom: '8px' }}>
+                Phone
+              </Text>
+              <Card 
+                style={{ 
+                  backgroundColor: '#1A1A1A',
+                  borderColor: '#333',
+                  borderRadius: '8px'
+                }}
+                bodyStyle={{ padding: '16px' }}
+              >
+                <Text style={{ 
+                  color: !aboutMeData?.phone ? '#999' : '#fff'
+                }}>
+                  {!aboutMeData?.phone ? 'No phone number' : aboutMeData.phone}
+                </Text>
+              </Card>
+            </div>
+          </Col>
+        </Row>
       </div>
-    </div>
+    </Space>
   );
 };
-
-export default AboutMeTab; 

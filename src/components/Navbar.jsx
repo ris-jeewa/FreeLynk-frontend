@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
-import { isLoggedIn } from "../services/Auth";
-import { login,handleCallback,STORAGE, parseJwt } from "../services/Auth";
+import { login,handleCallback,isLoggedIn, logout } from "../services/authis";
 
 export const Navbar = () => {
 
@@ -12,31 +11,12 @@ export const Navbar = () => {
   });
 
   useEffect(() => {
-    // If callback contains code, handle it
-    const url = new URL(window.location.href);
-    if (url.searchParams.get("code") && url.searchParams.get("state")) {
-      handleCallback()
-        .then((tokens) => {
-          // optionally parse id_token to get user info
-          const idToken = localStorage.getItem(STORAGE.ID_TOKEN);
-          const payload = idToken ? parseJwt(idToken) : null;
-          setAuthState({ loggedIn: true, user: payload });
-        })
-        .catch((err) => {
-          console.error("Callback handling failed:", err);
-          setAuthState({ loggedIn: false, user: null });
-        });
-    } else {
-      if (isLoggedIn()) {
-        const idToken = localStorage.getItem(STORAGE.ID_TOKEN);
-        const payload = idToken ? parseJwt(idToken) : null;
-        setAuthState({ loggedIn: true, user: payload });
-      } else {
-        setAuthState({ loggedIn: false, user: null });
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  setAuthState({
+    loggedIn: isLoggedIn(),
+    user: null,
+  });
+}, []);
+
 
 
   return (
@@ -54,28 +34,22 @@ export const Navbar = () => {
 
             {authState.loggedIn ? (
               <>
-                <div>
-                  <strong>Logged in</strong>
-                </div>
                 {/* {authState.user && (
                   <pre style={{ maxWidth: 600, background: "#f2f2f2", padding: 8 }}>
                     {JSON.stringify(authState.user, null, 2)}
                   </pre>
                 )} */}
-                <button onClick={() => { logout(); }} style={{ marginTop: 8 }}>
+                <button onClick={() => { logout(); }} style={{ marginTop: 8, backgroundColor: 'orange', color: 'white', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer' }}>
                   Logout
                 </button>
               </>
             ) : (
               <>
-                <div>
-                  <strong>Not logged in</strong>
-                </div>
                 <button
                   onClick={() => {
                     login();
                   }}
-                  style={{ marginTop: 8 }}
+                  style={{ marginTop: 8, backgroundColor: 'orange', color: 'white', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer' }}
                 >
                   Login
                 </button>

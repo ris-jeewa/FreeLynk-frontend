@@ -1,12 +1,98 @@
-# React + Vite
+# FreeLynk
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern freelancer platform frontend focused on fair pricing, transparency, and better communication between freelancers and clients.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React 19** + **Vite 6**
+- **Tailwind CSS 4** + **Ant Design**
+- **React Router 7**
+- **Auth**: WSO2 Identity Server (OAuth2/OIDC with PKCE)
+- **Media**: Cloudinary (image uploads)
+- **Payments**: Stripe (checkout)
+- **HTTP**: Axios, React Hot Toast
 
-## Expanding the ESLint configuration
+## Prerequisites
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Node.js (v18+ recommended)
+- npm or equivalent
+- Running instance of WSO2 Identity Server (for auth)
+- Backend API (default: `http://localhost:8080`)
+
+## Getting Started
+
+### Install dependencies
+
+```bash
+npm install
+```
+
+### Environment
+
+Create a `.env` in the project root if you need to override defaults:
+
+```env
+VITE_API_BASE_URL=http://localhost:8080
+```
+
+Auth is configured in `src/services/authis.js` (IDP host, redirect URI, client ID). Update those constants for your environment or move them to env variables.
+
+### Run locally
+
+```bash
+npm run dev
+```
+
+App runs at `http://localhost:5173` (or the port Vite shows).
+
+### Build for production
+
+```bash
+npm run build
+```
+
+### Preview production build
+
+```bash
+npm run preview
+```
+
+### Lint
+
+```bash
+npm run lint
+```
+
+## Project Structure
+
+```
+src/
+├── api/           # API client (axios instance, interceptors)
+├── assets/        # Static assets and constants
+├── components/    # Shared UI (Navbar, Layout, Sidebar, CloudinaryUploadWidget, etc.)
+├── client/       # Client profile and related components
+├── freelancer/   # Freelancer profile, skills, portfolio, about me
+├── pages/        # Route pages (Home, AboutUs, Membership, Careers, PostProject, AdminDashboard, Checkout)
+├── services/     # Auth (authis.js), user profile service
+├── utils/        # Helpers (e.g. imageUtils)
+├── App.jsx
+├── main.jsx
+└── index.css
+```
+
+## Features
+
+- **Authentication**: Login/logout via WSO2 IS (PKCE), token refresh, callback handling
+- **Profiles**: Freelancer and client profiles with bio, skills, portfolio, Cloudinary uploads
+- **Project**: Post project form (UI; backend integration in progress)
+- **Admin**: Admin dashboard structure
+- **Payments**: Checkout flow with Stripe
+- **UI**: Dark theme, responsive layout with Tailwind + Ant Design
+
+## Roadmap
+
+See [PROJECT_ROADMAP.md](./PROJECT_ROADMAP.md) for the strategic roadmap, current state, and planned phases.
+
+## License
+
+Private project.
