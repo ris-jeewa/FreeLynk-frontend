@@ -38,11 +38,15 @@ export const Navbar = () => {
     };
   }, [menuOpen]);
 
-  console.log(user,'user' , user?.sub	);
   const profilePath = useMemo(() => {
-    const id = user?.sub ? encodeURIComponent(user.sub) : "me";
-    return `/freelance-profile/${id}`;
-  }, [user?.sub]);
+    if (!user?.sub) return '/';
+    const roles = user['https://freelynk-api/roles'] ?? [];
+    const id = encodeURIComponent(user.sub);
+    if (roles.includes('freelancer')) return `/freelance-profile/${id}`;
+    if (roles.includes('client')) return `/client-profile/${id}`;
+    return '/';
+  }, [user]);
+
 
   return (
     <header className="fixed w-full z-10 bg-[#1A1A1A] border-b border-gray-800">
