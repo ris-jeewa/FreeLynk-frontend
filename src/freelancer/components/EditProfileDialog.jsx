@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { FaTimes, FaGithub, FaLinkedin, FaGlobe, FaUser, FaMapMarkerAlt, FaBriefcase } from "react-icons/fa";
+import { saveFreelancerProfile } from "../../services/userProfileService";
 
 export const EditProfileDialog = ({ profileData, setProfileData, isOpen, onClose, userId}) => {
   const [formData, setFormData] = useState(profileData);
   const [loading, setLoading] = useState(false);
 
-  console.log(userId,"userId",profileData.github,"profile data");
-  
   // Update formData when profileData changes
   React.useEffect(() => {
     if (profileData) {
@@ -26,19 +25,17 @@ export const EditProfileDialog = ({ profileData, setProfileData, isOpen, onClose
     e.preventDefault();
     try {
       setLoading(true);
-      
-      // Update local state with the new data
-      const updatedProfileData = {
-        ...profileData,
+      await saveFreelancerProfile(formData);
+      setProfileData(prev => ({
+        ...prev,
+        id: userId,
         name: formData.name,
         title: formData.title,
         location: formData.location,
         github: formData.github,
         linkedin: formData.linkedin,
-        portfolio: formData.portfolio
-      };
-      
-      setProfileData(updatedProfileData);
+        portfolio: formData.portfolio,
+      }));
       onClose();
     } catch (error) {
       console.error('Error updating profile:', error);
