@@ -11,7 +11,7 @@ import PortfolioTab from './components/PortfolioTab';
 import { EditAboutMe } from './components/EditAboutMe';
 import { EditSkills } from './components/EditSkills';
 import { EditProfileDialog } from './components/EditProfileDialog';
-import { getProfileData, updateUserImage } from '../services/userProfileService';
+import { getMyProfile, updateUserImage } from '../services/userProfileService';
 import { getBestImage, handleImageError } from '../utils/imageUtils';
 // import { shouldRedirectToLogin, clearAuthData } from '../utils/authUtils';
 
@@ -40,6 +40,8 @@ export const FreelanceProfile = () => {
   const [skillsData, setSkillsData] = useState("");
 
   const [userData, setUserData] = useState('');
+  const [profileNotFound, setProfileNotFound] = useState(false);
+  const isInitialLoadRef = useRef(true);
 
   // Configuration
   const cloudName = 'dcn64hytu'; 
@@ -149,76 +151,67 @@ export const FreelanceProfile = () => {
   }, [imageUrl, publicId]);
 
   useEffect(() => {
+    if (isLoading || !isAuthenticated) return;
+
     const fetchProfileData = async () => {
       try {
-        const response = await getProfileData();
-        console.log('Fetched user data:', response);
-        
-        if (response) {
-          // Update profile data with fetched user data
-          setProfileData(prevData => ({
-            ...prevData,
-            id: response.id,
-            name: response.name,
-            title: response.freelancerProfile?.title,
-            location: response.freelancerProfile?.location,
-            rating: response.freelancerProfile?.rating?.toString(),
-            reviews: response.freelancerProfile?.numberOfReviews?.toString(),
-            github: response.freelancerProfile?.githubUrl,
-            linkedin: response.freelancerProfile?.linkedinUrl,
-            portfolio: response.freelancerProfile?.portfolioUrl,
-          }));
+        const response = await getMyProfile();
 
-          // Update about me data
-          setAboutMeData({
-            id: response.id,
-            bio: response.bio,
-            email: response.email,
-            phone: response.phoneNumber 
-          });
+        setProfileData(prevData => ({
+          ...prevData,
+          id: response.id,
+          name: response.name,
+          title: response.freelancerProfile?.title,
+          location: response.freelancerProfile?.location,
+          rating: response.freelancerProfile?.rating?.toString(),
+          reviews: response.freelancerProfile?.numberOfReviews?.toString(),
+          github: response.freelancerProfile?.githubUrl,
+          linkedin: response.freelancerProfile?.linkedinUrl,
+          portfolio: response.freelancerProfile?.portfolioUrl,
+        }));
 
-          // Update skills data
-          if (response.freelancerProfile?.skills) {
-            setSkillsData(prevData => ({
-              ...prevData,
-              skills: response.freelancerProfile.skills
-            }));
-          }
-          
-          if (response.profilePictureUrl) {
-            setProfileImage(response.profilePictureUrl);
-            setImageUrl(response.profilePictureUrl);
-            // Extract public ID from the Cloudinary URL
-            try {
-              const urlParts = response.profilePictureUrl.split('/');
-              const fileName = urlParts[urlParts.length - 1].split('?')[0];
-              const publicIdFromUrl = fileName.split('.')[0];
-              
-              // If it's in a folder, include folder path
-              const folderIndex = urlParts.findIndex(part => part === 'upload');
-              if (folderIndex >= 0 && folderIndex < urlParts.length - 1) {
-                const folderPath = urlParts.slice(folderIndex + 1, -1).join('/');
-                const extractedPublicId = folderPath ? `${folderPath}/${publicIdFromUrl}` : publicIdFromUrl;
-                setPublicId(extractedPublicId);
-              } else {
-                setPublicId(publicIdFromUrl);
-              }
-            } catch (error) {
-              console.error("Error extracting publicId from saved URL:", error);
-            }
-          }
-          
-          setUserData(response);
+        setAboutMeData({
+          id: response.id,
+          bio: response.bio,
+          email: response.email,
+          phone: response.phoneNumber,
+        });
+
+        if (response.freelancerProfile?.skills) {
+          setSkillsData(prevData => ({ ...prevData, skills: response.freelancerProfile.skills }));
         }
+
+        if (response.profilePictureUrl) {
+          setProfileImage(response.profilePictureUrl);
+          setImageUrl(response.profilePictureUrl);
+          try {
+            const urlParts = response.profilePictureUrl.split('/');
+            const fileName = urlParts[urlParts.length - 1].split('?')[0];
+            const publicIdFromUrl = fileName.split('.')[0];
+            const folderIndex = urlParts.findIndex(part => part === 'upload');
+            if (folderIndex >= 0 && folderIndex < urlParts.length - 1) {
+              const folderPath = urlParts.slice(folderIndex + 1, -1).join('/');
+              setPublicId(folderPath ? `${folderPath}/${publicIdFromUrl}` : publicIdFromUrl);
+            } else {
+              setPublicId(publicIdFromUrl);
+            }
+          } catch (_) {}
+        }
+
+        setUserData(response);
       } catch (error) {
-        console.error("Error fetching profile data:", error);
+        if (error.response?.status === 404) {
+          // New user — no profile in DB yet, show defaults from Auth0
+          setProfileNotFound(true);
+          setProfileData(prev => ({ ...prev, name: user?.name ?? '' }));
+        }
       } finally {
-        // Mark initial load as complete after fetching data
         isInitialLoadRef.current = false;
       }
     };
+
     fetchProfileData();
-  }, []);
+  }, [isAuthenticated, isLoading]);
 
   // Check authentication status
   // useEffect(() => {
@@ -240,16 +233,12 @@ export const FreelanceProfile = () => {
   //   );
   // }
 
-  // Check if user is authenticated (either via Auth0 or custom auth)
-  const isUserAuthenticated = isAuthenticated || localStorage.getItem('authToken');
-  
-  // Show loading if not authenticated
-  if (!isUserAuthenticated && !isLoading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
-          <p className="mt-4 text-gray-400">Redirecting to login...</p>
+          <p className="mt-4 text-gray-400">Loading profile...</p>
         </div>
       </div>
     );
