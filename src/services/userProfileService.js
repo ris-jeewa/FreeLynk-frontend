@@ -1,14 +1,13 @@
 import api from "../api/apiClient";
 
-export const getProfileData = async (userId = 1) => {
-    try {
-        const response = await api.get(`/api/users/${userId}`);
-        console.log('User profile data:', response.data);
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching user profile:', error);
-        throw error;
-    }
+export const getMyProfile = async () => {
+    const response = await api.get('/api/users/me');
+    return response.data;
+}
+
+export const getProfileData = async (userId) => {
+    const response = await api.get(`/api/users/${userId}`);
+    return response.data;
 }
 
 export const updateAboutMe = async (userId, aboutMeData) => {
@@ -26,6 +25,20 @@ export const updateAboutMe = async (userId, aboutMeData) => {
         });
         throw error;
     }
+}
+
+export const saveFreelancerProfile = async (profileData) => {
+    const body = {
+        id: profileData.id,
+        name: profileData.name,
+        title: profileData.title,
+        location: profileData.location,
+        githubUrl: profileData.github,
+        linkedinUrl: profileData.linkedin,
+        portfolioUrl: profileData.portfolio,
+    };
+    const response = await api.post('/api/freelancers', body);
+    return response.data;
 }
 
 export const updateUserImage = async (userId, imageUrl) => {
