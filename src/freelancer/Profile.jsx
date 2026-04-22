@@ -16,7 +16,7 @@ import { getBestImage, handleImageError } from '../utils/imageUtils';
 // import { shouldRedirectToLogin, clearAuthData } from '../utils/authUtils';
 
 export const FreelanceProfile = () => {
-  const { user, isAuthenticated, isLoading, getAccessTokenSilently, logout } = useAuth0();
+  const { user, isAuthenticated, isLoading } = useAuth0();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('personal');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -39,8 +39,6 @@ export const FreelanceProfile = () => {
 
   const [skillsData, setSkillsData] = useState("");
 
-  const [userData, setUserData] = useState('');
-  const [profileNotFound, setProfileNotFound] = useState(false);
   const isInitialLoadRef = useRef(true);
 
   // Configuration

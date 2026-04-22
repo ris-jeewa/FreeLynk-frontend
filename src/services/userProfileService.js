@@ -2,6 +2,10 @@ import api from "../api/apiClient";
 
 export const getMyProfile = async () => {
     const response = await api.get('/api/users/me');
+    if (response.data.role === 'FREELANCER') {
+        const freelancerProfile = await api.get(`/api/freelancers/user/${response.data.id}`);
+        response.data.freelancerProfile = freelancerProfile.data;
+    }
     return response.data;
 }
 
