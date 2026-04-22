@@ -7,34 +7,30 @@ const api = axios.create({
   },
 });
 
-// Add request interceptor to include auth token
+let getAccessToken = null;
+
+export const setAccessTokenGetter = (getter) => {
+  getAccessToken = getter;
+};
+
 api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+  async (config) => {
+    if (getAccessToken) {
+      try {
+        const token = await getAccessToken();
+        config.headers.Authorization = `Bearer ${token}`;
+      } catch (_) {
+        // not authenticated, proceed without token
+      }
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Add response interceptor to handle auth errors
 api.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    if (error.response?.status === 401) {
-      // Clear auth data and redirect to login
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('userData');
-      window.location.href = '/login';
-    }
-    return Promise.reject(error);
-  }
+  (response) => response,
+  (error) => Promise.reject(error)
 );
 
 export default api;

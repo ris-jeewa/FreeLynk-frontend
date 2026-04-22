@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
+import { Auth0TokenBridge } from "./components/Auth0TokenBridge";
 import { Home } from "./pages/Home";
 // import Login from "./Auth/Login";
 import { FreelanceProfile } from "./freelancer/Profile";
@@ -19,10 +20,10 @@ import Checkout from "./pages/Checkout";
 
 const App = () => {
   return (
+    <>
+      <Auth0TokenBridge />
       <Routes>
         {/* Auth pages without Layout */}
-        {/* <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} /> */}
 
         <Route path="/checkout" element={<Checkout />} />
         
@@ -88,6 +89,7 @@ const App = () => {
             </Layout>
         } />
       </Routes>
+    </>
   );
 };
 
