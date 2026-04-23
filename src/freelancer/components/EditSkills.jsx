@@ -1,18 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaTimes } from "react-icons/fa";
 
 export const EditSkills = ({skillsData, setSkillsData, setIsSkillsEditOpen}) => {
 
+    const normalize = (data) => ({
+      skills: data?.skills ?? "",
+      experiences: Array.isArray(data?.experiences) ? data.experiences : [],
+    });
+
+    const [form, setForm] = useState(() => normalize(skillsData));
+
+    // If the parent loads a different skillsData while modal is open, refresh form.
+    useEffect(() => {
+      setForm(normalize(skillsData));
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [skillsData]);
+
     const handleSkillsSave = (e) => {
         e.preventDefault();
+        setSkillsData(form);
         setIsSkillsEditOpen(false);
       };
     
       const handleSkillsChange = (e) => {
         const { name, value } = e.target;
-        setSkillsData(prev => ({
+        setForm((prev) => ({
           ...prev,
-          [name]: value
+          [name]: value,
         }));
       };
     
@@ -26,9 +40,9 @@ export const EditSkills = ({skillsData, setSkillsData, setIsSkillsEditOpen}) => 
     
       const handleAddExperience = (e) => {
         e.preventDefault();
-        setSkillsData(prev => ({
+        setForm((prev) => ({
           ...prev,
-          experiences: [...prev.experiences, newExperience]
+          experiences: [...(prev.experiences ?? []), newExperience],
         }));
         setNewExperience({
           position: '',
@@ -39,9 +53,9 @@ export const EditSkills = ({skillsData, setSkillsData, setIsSkillsEditOpen}) => 
       };
     
       const handleRemoveExperience = (index) => {
-        setSkillsData(prev => ({
+        setForm((prev) => ({
           ...prev,
-          experiences: prev.experiences.filter((_, i) => i !== index)
+          experiences: (prev.experiences ?? []).filter((_, i) => i !== index),
         }));
       };
 
@@ -70,8 +84,9 @@ export const EditSkills = ({skillsData, setSkillsData, setIsSkillsEditOpen}) => 
             </label>
             <textarea
               name="skills"
-              value={skillsData.skills}
+              value={form.skills}
               onChange={handleSkillsChange}
+              autoFocus
               className="w-full bg-[#1A1A1A] border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500 h-32"
               placeholder="Enter skills separated by commas"
             />
@@ -82,7 +97,7 @@ export const EditSkills = ({skillsData, setSkillsData, setIsSkillsEditOpen}) => 
               Work Experience
             </h3>
             <div className="space-y-4">
-              {skillsData.experiences.map((exp, index) => (
+              {form?.experiences?.map((exp, index) => (
                 <div key={index} className="bg-[#1A1A1A] p-4 rounded-lg">
                   <div className="flex justify-between items-start mb-2">
                     <h4 className="text-white font-medium">{exp.position}</h4>
