@@ -2,17 +2,25 @@ import React from 'react';
 import { FaEdit } from 'react-icons/fa';
 
 const SkillsTab = ({ skillsData, handleSkillsEdit }) => {
-  // Parse skills if it's a JSON string, otherwise use the array directly
+
+  console.log(skillsData,"----------skills data");
   const getSkillsArray = () => {
     if (!skillsData?.skills) return [];
     
-    // If skills is a string, try to parse it as JSON
+    // If skills is a string, accept either JSON array or comma-separated text
     if (typeof skillsData.skills === 'string') {
+      const raw = skillsData.skills.trim();
+      if (!raw) return [];
+
       try {
-        return JSON.parse(skillsData.skills);
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) return parsed;
       } catch (error) {
-        console.error('Error parsing skills JSON:', error);
-        return [];
+        // Not JSON — fall back to comma-separated values
+        return raw
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean);
       }
     }
     
@@ -29,7 +37,7 @@ const SkillsTab = ({ skillsData, handleSkillsEdit }) => {
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-white mb-6">Skills</h2>
+        <h2 className="text-2xl font-bold text-white">Skills</h2>
         <button
           onClick={handleSkillsEdit}
           className='border-1 border-gray-500 rounded-full p-2'
@@ -52,19 +60,21 @@ const SkillsTab = ({ skillsData, handleSkillsEdit }) => {
         )}
       </div>
 
-      {/* <div>
+      <div>
         <h2 className="text-2xl font-bold text-white mb-6">Work Experience</h2>
         <div className="space-y-6">
-          {skillsData.experiences.map((exp, index) => (
+          {skillsData?.experiences?.length > 0 ? (skillsData?.experiences?.map((exp, index) => (
             <div key={index} className="border-l-2 border-orange-500 pl-4">
               <h3 className="text-xl font-semibold text-white">{exp.position}</h3>
               <p className="text-orange-500">{exp.company}</p>
               <p className="text-gray-400">{exp.period}</p>
               <p className="text-gray-400 mt-2">{exp.description}</p>
             </div>
-          ))}
+          ))):(
+            <p className="text-gray-400">No work experience added yet. Click edit to add work experience.</p>
+          )}
         </div>
-      </div> */}
+      </div>
     </div>
   );
 };
