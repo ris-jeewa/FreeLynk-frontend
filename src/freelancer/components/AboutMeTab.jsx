@@ -6,7 +6,7 @@ const { Title, Paragraph, Text } = Typography;
 
 export const AboutMeTab = ({ aboutMeData, handleAboutMeEdit }) => {
   return (
-    <Space direction="vertical" size="large" style={{ width: '100%' }}>
+    <Space orientation="vertical" size="large" style={{ width: '100%' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Title level={2} style={{ color: '#fff', margin: 0 }}>
           About Me
@@ -34,7 +34,7 @@ export const AboutMeTab = ({ aboutMeData, handleAboutMeEdit }) => {
           borderColor: '#333',
           borderRadius: '8px'
         }}
-        bodyStyle={{ padding: '16px' }}
+        styles={{ body: { padding: '16px' } }}
       >
         <Paragraph 
           style={{ 
@@ -63,7 +63,7 @@ export const AboutMeTab = ({ aboutMeData, handleAboutMeEdit }) => {
                   borderColor: '#333',
                   borderRadius: '8px'
                 }}
-                bodyStyle={{ padding: '16px' }}
+                styles={{ body: { padding: '16px' } }}
               >
                 <Text style={{ 
                   color: !aboutMeData?.email ? '#999' : '#fff'
@@ -84,7 +84,7 @@ export const AboutMeTab = ({ aboutMeData, handleAboutMeEdit }) => {
                   borderColor: '#333',
                   borderRadius: '8px'
                 }}
-                bodyStyle={{ padding: '16px' }}
+                styles={{ body: { padding: '16px' } }}
               >
                 <Text style={{ 
                   color: !aboutMeData?.phone ? '#999' : '#fff'

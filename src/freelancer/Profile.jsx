@@ -35,7 +35,12 @@ export const FreelanceProfile = () => {
     portfolio: ''
   });
 
-  const [aboutMeData, setAboutMeData] = useState("");
+  const [aboutMeData, setAboutMeData] = useState({
+    id: null,
+    bio: "",
+    email: "",
+    phone: ""
+  });
 
   const [skillsData, setSkillsData] = useState("");
 
